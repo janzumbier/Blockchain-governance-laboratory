@@ -1,0 +1,35 @@
+{% macro remove_initial_tabs(line) %}
+{{ line | replace('    ', '', 4) }}
+{% endmacro %}
+apiVersion: hlf.kungfusoftware.es/v1alpha1
+kind: FabricFollowerChannel
+metadata:
+  name: {{ metadata_name }}
+spec:
+  
+  anchorPeers:
+    {% for anchor_peer in anchor_peers -%}
+    - host: {{ anchor_peer.host }}
+      port: {{ anchor_peer.port }}
+    {% endfor %}
+
+  hlfIdentity:
+    secretKey: {{ secretKey }}
+    secretName: {{ secretName }}
+    secretNamespace: {{ secretNamespace }}
+
+  mspId: {{ targetmspid }}
+  name: {{ targetchannel }}
+  externalPeersToJoin: []
+  orderers:
+    {% for orderer in orderers -%}
+    - certificate: |
+      {{ remove_initial_tabs('          ' ~ orderer.certificate) }}
+      url: {{ orderer.url }}
+    {% endfor %}
+    
+  peersToJoin:
+    {% for peer in peers_to_join -%}
+    - name: {{ peer.name }}
+      namespace: {{ peer.namespace }}
+    {% endfor %}
