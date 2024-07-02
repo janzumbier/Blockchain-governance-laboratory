@@ -1,0 +1,66 @@
+---
+  - block:
+      - name: Setting metadata for main channel
+        set_fact:
+          channel_name: "demo"
+          new_identity_key: Org3MSP
+          peer_org_caName_to_remove: org3-ca
+          new_identity:
+            secretKey: user.yaml
+            secretName: org3msp-admin
+            secretNamespace: default
+          new_peer_org:
+            caName: org3-ca
+            caNamespace: default
+            mspID: Org3MSP
+
+      - name: Getting orderer parameters
+        shell: kubectl get fabricmainchannels.hlf.kungfusoftware.es/demo -o yaml | yq eval '.spec'
+        register: spec
+
+      - name: Convert spec
+        set_fact:
+            spec_name: "{{ spec.stdout }}"
+
+      - name: Generate YAML file from template
+        ansible.builtin.template:
+            src: "templates/MainChannel/template/main_channel.yaml.j2"
+            dest: "templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml"
+
+      - name: Insert the new organization into the adminPeerOrganizations list
+        ansible.builtin.lineinfile:
+            path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
+            insertbefore: '^  channelConfig:'
+            line: '    - mspID: Org3MSP'
+
+      - name: Construct the new identity block
+        set_fact:
+            new_identity_block: |
+              {{ new_identity_key }}:
+                secretKey: {{ new_identity.secretKey }}
+                secretName: {{ new_identity.secretName }}
+                secretNamespace: {{ new_identity.secretNamespace }}
+
+      - name: Insert the new identity block into the YAML file
+        blockinfile:
+            path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
+            insertafter: '^  identities:'
+            block: "{{ new_identity_block | indent(4, True) }}"
+
+      - name: Construct the new peer block
+        set_fact:
+            new_peer_block: |
+              - caName: {{ new_peer_org.caName }}
+                caNamespace: {{ new_peer_org.caNamespace }}
+                mspID: {{ new_peer_org.mspID }}
+
+
+      - name: Insert the new peer organization block into the YAML file
+        blockinfile:
+            path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
+            insertafter: '^  peerOrganizations:'
+            marker: "# {mark} ANSIBLE MANAGED BLOCK - peerOrganizations"
+            block: "{{ new_peer_block | indent(4, True) }}"
+
+      - name: Apply Main channel file 
+        shell: kubectl apply -f templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml

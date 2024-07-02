@@ -1,0 +1,26 @@
+---
+- name: Create msp identities of all defined organisations
+  hosts: localhost
+  tasks:
+    - name: Read JSON file
+      ansible.builtin.include_vars:
+        file: config/onboarding_config.json
+        name: onboardingconfig
+      
+    - name: Load orderer and peerorganisations from network config
+      ansible.builtin.set_fact:
+        orderer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.ordererOrganisations[*]')}}"
+        peer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*]')}}"
+
+    - name: Register MSPID for peer organisations
+      command : kubectl hlf ca register --name={{ item.certificateAuthorities[0].name }} --user=admin --secret=adminpw --type=admin --enroll-id=enroll --enroll-secret=enrollpw --mspid={{item.mspid}}
+      loop: "{{ peer_organisations}}"
+      ignore_errors: true
+
+    - name: Enroll MSPID for peer organisations  
+      command: kubectl hlf identity create --name {{item.mspid | lower}}-admin --namespace default --ca-name {{item.certificateAuthorities[0].name}} --ca-namespace default --ca ca --mspid {{item.mspid}} --enroll-id admin --enroll-secret adminpw
+      loop: "{{peer_organisations}}"
+      ignore_errors: true
+
+
+

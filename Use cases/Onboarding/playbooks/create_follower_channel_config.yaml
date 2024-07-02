@@ -1,0 +1,57 @@
+---
+  - block:
+    - name: Setting metadata
+      ansible.builtin.set_fact:
+        targetchannel: "demo"
+        targetmspid: "{{ peer_org.mspid }}"
+        peer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*]')}}"
+        #### What about downtime??? TODO
+        first_orderer: "{{ onboardingconfig| json_query('OnboardingConfig.ordererOrganisations[0].orderers[0]')}}"
+        ####
+        
+
+    - name: Load all peer organisations from network config
+      ansible.builtin.set_fact:
+        peer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*]')}}"
+        #### What about downtime??? TODO
+        first_orderer: "{{ onboardingconfig | json_query('OnboardingConfig.ordererOrganisations[0].orderers[0]')}}"
+        ####
+        anchor_peers: []
+        peers_to_join: []
+        orderers: []
+        metadata_name: "{{targetchannel | lower}}-{{targetmspid | lower}}"
+        secretKey: "user.yaml"
+        secretName: "{{targetmspid | lower}}-admin"
+        secretNamespace: "default"
+        url: "grpcs://{{first_orderer.name}}.default:7050"
+
+    - name: Getting anchor peers
+      ansible.builtin.set_fact:
+        anchor_peers: "{{ anchor_peers + [{'host': (item.name)~'.default' , 'port': 7051}] }}"
+      loop: "{{ peer_org.peers }}"
+
+
+    - name: Find Peer Organization with MSP ID Org1MSP
+      ansible.builtin.set_fact:
+        peers_to_join: "{{ peers_to_join + [{'name': item.name, 'namespace': 'default'}] }}"
+      loop: "{{ peer_org.peers }}"
+
+    - name: Getting orderer parameters
+      shell: |
+        IDENT_8=$(printf "%8s" "")
+        ORDERER0_TLS_CERT=$(kubectl get fabricorderernodes ord-node1 -o=jsonpath='{.status.tlsCert}' | sed -e "s/^/${IDENT_8}/")
+        echo "${ORDERER0_TLS_CERT}"
+      register: certificate
+
+    - name: Building orderer dictionary
+      ansible.builtin.set_fact:
+        orderers: "{{ orderers + [{'certificate': certificate.stdout,'url': url}] }}"
+
+
+    - name: Generate YAML file from template
+      ansible.builtin.template:
+        src: "templates/FollowerChannel/template/follower_channel_template.yaml.j2"
+        dest: "templates/FollowerChannel/generatedConfigs/{{ metadata_name }}.yaml"
+
+    - name: Apply followerchannel file 
+      shell: kubectl apply -f templates/FollowerChannel/generatedConfigs/{{ metadata_name }}.yaml

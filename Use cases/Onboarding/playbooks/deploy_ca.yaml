@@ -4,29 +4,21 @@
   tasks:
     - name: Read JSON file
       ansible.builtin.include_vars:
-        file: networkconfig/networkconfigexample.json
-        name: networkconfig
+        file: config/onboarding_config.json
+        name: onboardingconfig
 
     - name: Get ca parameters
       ansible.builtin.set_fact:
-        peer_ca: "{{ networkconfig | json_query('networkConfig.peerOrganisations[*].certificateAuthorities[*][]')}}"
-        orderer_ca: "{{ networkconfig | json_query('networkConfig.ordererOrganisations[*].certificateAuthorities[*][]')}}"
+        peer_ca: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*].certificateAuthorities[*][]')}}"
+        orderer_ca: "{{ onboardingconfig | json_query('OnboardingConfig.ordererOrganisations[*].certificateAuthorities[*][]')}}"
 
     
     - name: Print detected configuration for peer-orgs
       debug:
         msg: "{{ item }}"
-      loop: "{{ peer_ca}}"
+      loop: "{{ peer_ca }}"
     
     - name: Deploy Peer cas
       command: kubectl hlf ca create --storage-class=standard --capacity={{ item.capacity }} --name={{ item.name  }} --enroll-id=enroll --enroll-pw=enrollpw --hosts={{ item.hosts  }} --istio-port={{ item.istioport }} 
       loop: "{{ peer_ca }}"
 
-    - name: Print detected configuration for orderer-orgs
-      debug:
-        msg: "{{ item }}"
-      loop: "{{ orderer_ca }}"
-    
-    - name: Deploy orderer cas
-      command: kubectl hlf ca create --storage-class=standard --capacity={{ item.capacity }} --name={{ item.name }} --enroll-id=enroll --enroll-pw=enrollpw --hosts={{ item.hosts }} --istio-port={{ item.istioport }} 
-      loop: "{{ orderer_ca }}"

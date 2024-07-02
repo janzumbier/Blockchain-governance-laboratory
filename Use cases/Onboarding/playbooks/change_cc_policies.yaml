@@ -1,0 +1,69 @@
+---
+- name: Change the smart contract policy
+  hosts: localhost
+
+  tasks:
+
+      - name: Read JSON file
+        ansible.builtin.include_vars:
+          file: config/onboarding_config.json
+          name: onboardingconfig
+
+      - name: Convert spec
+        set_fact:
+          channel: "{{ onboardingconfig | json_query('OnboardingConfig.channels[*]')}}"
+          chaincode_name: "{{ onboardingconfig | json_query('OnboardingConfig.channels[0].chaincodes[0].name')}}"
+          peer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*]')}}"
+
+      - name: Getting package id 
+        shell: kubectl get fabricchaincodes.hlf.kungfusoftware.es/token -o yaml | yq eval '.spec.packageId'
+        register: pid
+
+      - name: Convert package id
+        set_fact:
+            pid_out: "{{ pid.stdout }}"
+
+      - name: Generating connection.json from template
+        ansible.builtin.template:
+          src: "chaincode/connection.json.j2"
+          dest: "chaincode/connection.json"
+
+      - name: Generating metadata.json from template
+        ansible.builtin.template:
+          src: "chaincode/metadata.json.j2"
+          dest: "chaincode/metadata.json"
+
+      - name: taring
+        shell: cd chaincode && tar cfz code.tar.gz connection.json
+
+      - name: taring
+        shell: cd chaincode && tar cfz chaincode.tgz metadata.json code.tar.gz
+
+
+      - name: Creating a network configuration for each organisation
+        command: kubectl hlf networkconfig create --name={{item.1.mspid | lower}}-cp -o {{item.1.mspid}} -o OrdererMSP -c {{ item.0.name }} --identities={{item.1.mspid | lower}}-admin.default --secret={{item.1.mspid | lower}}-cp
+        loop: "{{ channel | subelements('peerparticipants') }}"
+        ignore_errors: true
+
+      - name: Installing chaincode on all peers
+        command: kubectl hlf chaincode install --path=chaincode/chaincode.tgz --config=certificates/{{item.0.mspid | lower}}-cp.yaml --language=java --label={{chaincode_name}} --user={{item.0.mspid | lower}}-admin-default --peer={{item.1.name}}.default
+        loop: "{{ peer_organisations | subelements('peers') }}"
+        ignore_errors: true
+
+      - name: Fetching connection profile of each organisation
+        shell: kubectl get secret {{item.1.mspid| lower}}-cp -o jsonpath="{.data.config\.yaml}" | base64 --decode > certificates/{{item.1.mspid | lower}}-cp.yaml
+        loop: "{{ channel | subelements('peerparticipants') }}"
+        ignore_errors: true
+
+      - name: Approve the chaincode for all organisations
+        command: kubectl hlf chaincode approveformyorg --config=certificates/{{item.1.mspid | lower}}-cp.yaml --user={{item.1.mspid | lower}}-admin-default --peer={{item.1.peer}}.default --package-id={{pid_out}} --version "{{item.0.chaincodes[0].version}}" --sequence "{{item.0.chaincodes[0].sequence}}" --name={{item.0.chaincodes[0].name}} --policy="{{item.0.chaincodes[0].policy}}" --channel={{item.0.name}}
+        loop: "{{ channel | subelements('peerparticipants') }}"
+        ignore_errors: true
+
+      - name: pause for 30 seconds
+        pause:
+          seconds: 30
+
+      - name: Committing chaincode for all organisations
+        command: kubectl hlf chaincode commit --config=certificates/{{channel[0].peerparticipants[0].mspid | lower}}-cp.yaml --user={{channel[0].peerparticipants[0].mspid | lower}}-admin-default --mspid={{channel[0].peerparticipants[0].mspid}}  --version "{{channel[0].chaincodes[0].version}}" --sequence "{{channel[0].chaincodes[0].sequence}}" --name={{channel[0].chaincodes[0].name}} --policy="{{channel[0].chaincodes[0].policy}}" --channel={{channel[0].name}}
+      

@@ -4,12 +4,12 @@
   tasks:
     - name: Read JSON file
       ansible.builtin.include_vars:
-        file: networkconfig/networkconfigexample.json
-        name: networkconfig
+        file: config/onboarding_config.json
+        name: onboardingconfig
       
     - name: Load all peer organisations from network config
       ansible.builtin.set_fact:
-        peer_organisations: "{{ networkconfig | json_query('networkConfig.peerOrganisations[*]')}}"
+        peer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*]')}}"
 
     - name: Print peer organisations
       debug:

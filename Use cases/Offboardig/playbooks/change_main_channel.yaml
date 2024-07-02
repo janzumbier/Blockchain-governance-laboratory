@@ -1,0 +1,22 @@
+- name: Construct the new peer block
+      set_fact:
+        new_peer_block: |
+          - caName: {{ new_peer_org.caName }}
+            caNamespace: {{ new_peer_org.caNamespace }}
+            mspID: {{ new_peer_org.mspID }}
+
+
+    - name: Insert the new peer organization block into the YAML file
+      blockinfile:
+        path: testyaml.yaml
+        insertafter: '^  peerOrganizations:'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - peerOrganizations"
+        block: "{{ new_peer_block | indent(4, True) }}"
+
+    - name: Insert the new peer organization block into the YAML file
+      blockinfile:
+        path: testyaml.yaml
+        insertafter: '^  peerOrganizations:'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - peerOrganizations"
+        block: "{{ new_peer_block | indent(4, True) }}"
+        state: absent

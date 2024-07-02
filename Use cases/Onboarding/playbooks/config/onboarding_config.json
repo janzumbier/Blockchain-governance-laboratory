@@ -1,0 +1,89 @@
+{
+    "OnboardingConfig": {
+        "name": "OnboardingConfig",
+        "peerOrganisations": [
+            {
+                "name": "Org3",
+                "mspid": "Org3MSP",
+                "peers": [
+                    {
+                        "name":"org3-peer0",
+                        "capacity":"5Gi",
+                        "caname":"org3-ca.default",
+                        "hosts":"peer0-org3.localho.st",
+                        "istioport": 443
+                    }
+                ],
+                "certificateAuthorities": [
+                    {
+                        "name":"org3-ca",
+                        "capacity":"1Gi",
+                        "hosts":"org3-ca.localho.st",
+                        "istioport": 443
+                    }
+                ]
+            }
+        ],
+        "ordererOrganisations": [
+            {
+                "name": "OrdererOrg",
+                "mspid": "OrdererMSP",
+                "orderers": [
+                    {
+                        "name":"ord-node1",
+                        "capacity":"2Gi",
+                        "caname":"ord-ca.default",
+                        "hosts":"orderer0-ord.localho.st",
+                        "istioport": 443,
+                        "endpoint": "ord-node1:7050",
+                        "externalport": 7053,
+                        "port": 7050
+                    }
+                ],
+                "certificateAuthorities": [
+                    {
+                        "name":"ord-ca",
+                        "capacity":"1Gi",
+                        "hosts":"ord-ca.localho.st",
+                        "istioport": 443
+                    }
+                ]
+            }
+        ],
+        "channels": [
+            {
+                "name": "demo",
+                "ordererparticipants": ["OrdererMSP"],
+                "peerparticipants": [
+
+                    {
+                        "mspid": "Org1MSP",
+                        "peer": "org1-peer0"
+
+                    },
+                    {
+                        "mspid": "Org2MSP",
+                        "peer": "org2-peer0"
+
+                    },
+                    {
+                        "mspid": "Org3MSP",
+                        "peer": "org3-peer0"
+                    }
+                    
+
+                ],
+                "chaincodes": [
+                    {
+                        "name": "token",
+                        "image": "janzumbier/tokencontract:latest",
+                        "version": "1.5",
+                        "sequence": "4",
+                        "language": "java",
+                        "policy": "OR('Org1MSP.member', 'Org2MSP.member')"
+                    }
+                ]
+            }
+        ]
+    }
+}
