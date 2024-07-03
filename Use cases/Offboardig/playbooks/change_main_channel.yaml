@@ -1,22 +1,49 @@
-- name: Construct the new peer block
-      set_fact:
-        new_peer_block: |
-          - caName: {{ new_peer_org.caName }}
-            caNamespace: {{ new_peer_org.caNamespace }}
-            mspID: {{ new_peer_org.mspID }}
+---
+  - block:
+      - name: Setting metadata for main channel
+        set_fact:
+          channel_name: "demo"
+          new_identity_key: Org3MSP
+          peer_org_caName_to_remove: org3-ca
+          new_identity:
+            secretKey: user.yaml
+            secretName: org3msp-admin
+            secretNamespace: default
+          new_peer_org:
+            caName: org3-ca
+            caNamespace: default
+            mspID: Org3MSP
 
+      - name: Getting orderer parameters
+        shell: kubectl get fabricmainchannels.hlf.kungfusoftware.es/demo -o yaml | yq eval '.spec'
+        register: spec
 
-    - name: Insert the new peer organization block into the YAML file
-      blockinfile:
-        path: testyaml.yaml
-        insertafter: '^  peerOrganizations:'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - peerOrganizations"
-        block: "{{ new_peer_block | indent(4, True) }}"
+      - name: Convert spec
+        set_fact:
+            spec_name: "{{ spec.stdout }}"
 
-    - name: Insert the new peer organization block into the YAML file
-      blockinfile:
-        path: testyaml.yaml
-        insertafter: '^  peerOrganizations:'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - peerOrganizations"
-        block: "{{ new_peer_block | indent(4, True) }}"
-        state: absent
+      - name: Generate YAML file from template
+        ansible.builtin.template:
+            src: "templates/MainChannel/template/main_channel.yaml.j2"
+            dest: "templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml"
+
+      - name: Delete entry from adminPeerOrganizations section in YAML file
+        ansible.builtin.replace:
+          path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
+          regexp: '(\s*-\s*mspID:\s*Org3MSP\s*\n)'
+          replace: '\n'
+
+      - name: Delete entry from identities section in YAML file
+        ansible.builtin.replace:
+          path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
+          regexp: '(\s*Org3MSP:\s*\n\s*secretKey:\s*user.yaml\s*\n\s*secretName:\s*org3msp-admin\s*\n\s*secretNamespace:\s*default\s*\n)'
+          replace: '\n'
+
+      - name: Delete entries from peer section in YAML file
+        ansible.builtin.replace:
+          path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
+          regexp: '(\s*-\s*caName:\s*org3-ca\s*\n\s*caNamespace:\s*default\s*\n\s*mspID:\s*Org3MSP\s*\n)'
+          replace: '\n'
+
+      - name: Apply Main channel file 
+        shell: kubectl apply -f templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
