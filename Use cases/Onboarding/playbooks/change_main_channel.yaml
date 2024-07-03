@@ -27,25 +27,7 @@
             src: "templates/MainChannel/template/main_channel.yaml.j2"
             dest: "templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml"
 
-      - name: Insert the new organization into the adminPeerOrganizations list
-        ansible.builtin.lineinfile:
-            path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
-            insertbefore: '^  channelConfig:'
-            line: '    - mspID: Org3MSP'
-
-      - name: Construct the new identity block
-        set_fact:
-            new_identity_block: |
-              {{ new_identity_key }}:
-                secretKey: {{ new_identity.secretKey }}
-                secretName: {{ new_identity.secretName }}
-                secretNamespace: {{ new_identity.secretNamespace }}
-
-      - name: Insert the new identity block into the YAML file
-        blockinfile:
-            path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
-            insertafter: '^  identities:'
-            block: "{{ new_identity_block | indent(4, True) }}"
+    ###
 
       - name: Construct the new peer block
         set_fact:

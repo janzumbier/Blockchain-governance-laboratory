@@ -1,17 +1,13 @@
 {
     "OnboardingConfig": {
-        "name": "OnboardingConfig",
+        "name": "OffboardingConfig",
         "peerOrganisations": [
             {
                 "name": "Org3",
                 "mspid": "Org3MSP",
                 "peers": [
                     {
-                        "name":"org3-peer0",
-                        "capacity":"5Gi",
-                        "caname":"org3-ca.default",
-                        "hosts":"peer0-org3.localho.st",
-                        "istioport": 443
+                        "name":"org3-peer0"
                     }
                 ],
                 "certificateAuthorities": [
@@ -62,6 +58,11 @@
 
                     },
                     {
+                        "mspid": "Org2MSP",
+                        "peer": "org2-peer0"
+
+                    },
+                    {
                         "mspid": "Org3MSP",
                         "peer": "org3-peer0"
                     }
@@ -72,10 +73,10 @@
                     {
                         "name": "token",
                         "image": "janzumbier/tokencontract:latest",
-                        "version": "1.1",
-                        "sequence": "2",
+                        "version": "1.5",
+                        "sequence": "4",
                         "language": "java",
-                        "policy": "OR('Org1MSP.member', 'Org3MSP.member')"
+                        "policy": "OR('Org1MSP.member', 'Org2MSP.member')"
                     }
                 ]
             }

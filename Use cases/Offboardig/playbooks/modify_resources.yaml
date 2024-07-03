@@ -1,0 +1,21 @@
+---
+- name: Creating configured channels
+  hosts: localhost
+  vars_files:
+     - config/offboarding_config.json
+
+  tasks:
+    - name: Read JSON file
+      ansible.builtin.include_vars:
+        file: config/offboarding_config.json
+        name: offboardingconfig
+
+    - name: Modify main channel
+      include_tasks: change_main_channel.yaml
+
+    - name: Deletig resources
+      include_tasks: delete_resources.yaml
+        
+      
+
+    
