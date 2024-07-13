@@ -1,0 +1,43 @@
+apiVersion: hlf.kungfusoftware.es/v1alpha1
+kind: FabricFollowerChannel
+metadata:
+  name: demo-org2msp
+spec: 
+  anchorPeers:
+    - host: org2-peer0.default
+      port: 7051
+    - host: org2-peer1.default
+      port: 7051
+  externalPeersToJoin: []
+  hlfIdentity:
+    secretKey: user.yaml
+    secretName: org2msp-admin
+    secretNamespace: default
+  mspId: Org2MSP
+  name: demo
+  orderers:
+    - certificate: |
+        -----BEGIN CERTIFICATE-----
+        MIIC2DCCAn6gAwIBAgIUHmGcFbrobHDro5CO0tUDQ8K9puUwCgYIKoZIzj0EAwIw
+        bTELMAkGA1UEBhMCRVMxETAPBgNVBAcTCEFsaWNhbnRlMREwDwYDVQQJEwhBbGlj
+        YW50ZTEZMBcGA1UEChMQS3VuZyBGdSBTb2Z0d2FyZTENMAsGA1UECxMEVGVjaDEO
+        MAwGA1UEAxMFdGxzY2EwHhcNMjQwNzEyMTAxNTU0WhcNMjUwNzEzMTAxODAwWjAk
+        MRAwDgYDVQQLEwdvcmRlcmVyMRAwDgYDVQQDEwdvcmRlcmVyMFkwEwYHKoZIzj0C
+        AQYIKoZIzj0DAQcDQgAEr39D635pBYb6+u12VErU+IvUdI4lQAZhdXogoWZ36BLR
+        LnoIXiHCmVyKTKYLlR6Ia5FZO+Q/ZHuHBRDmVjHayKOCAUMwggE/MA4GA1UdDwEB
+        /wQEAwIDqDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/
+        BAIwADAdBgNVHQ4EFgQUY0cKbQ810yc2UFhtJrE54OJzg6IwKwYDVR0jBCQwIoAg
+        APZtrlVuy8FztZkdauc7VT469uUdhu/Myz5wTq+9yz0wVwYDVR0RBFAwToIJbG9j
+        YWxob3N0gglvcmQtbm9kZTGCEW9yZC1ub2RlMS5kZWZhdWx0ghdvcmRlcmVyMC1v
+        cmQubG9jYWxoby5zdIcEfwAAAYcErBIAAjBbBggqAwQFBgcIAQRPeyJhdHRycyI6
+        eyJoZi5BZmZpbGlhdGlvbiI6IiIsImhmLkVucm9sbG1lbnRJRCI6Im9yZGVyZXIi
+        LCJoZi5UeXBlIjoib3JkZXJlciJ9fTAKBggqhkjOPQQDAgNIADBFAiEAstlWZY44
+        ybFsFEkGgcc5ld8rfgGyrL0MqPX/TzGsZwUCIA5gDznwkFT6LNIzDxSzmvS6ZEmz
+        87hMn/87U7LrYHjv
+        -----END CERTIFICATE-----
+      url: grpcs://ord-node1.default:7050
+  peersToJoin:
+    - name: org2-peer0
+      namespace: default
+    - name: org2-peer1
+      namespace: default

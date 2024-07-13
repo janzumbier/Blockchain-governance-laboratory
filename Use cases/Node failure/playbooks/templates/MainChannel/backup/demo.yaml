@@ -1,0 +1,96 @@
+apiVersion: hlf.kungfusoftware.es/v1alpha1
+kind: FabricMainChannel
+metadata:
+  name: demo
+spec: 
+  adminOrdererOrganizations:
+    - mspID: OrdererMSP
+  adminPeerOrganizations:
+    - mspID: Org1MSP
+    - mspID: Org2MSP
+  channelConfig:
+    application:
+      acls: null
+      capabilities:
+        - V2_0
+      policies: null
+    capabilities:
+      - V2_0
+    orderer:
+      batchSize:
+        absoluteMaxBytes: 1048576
+        maxMessageCount: 10
+        preferredMaxBytes: 524288
+      batchTimeout: 2s
+      capabilities:
+        - V2_0
+      etcdRaft:
+        options:
+          electionTick: 10
+          heartbeatTick: 1
+          maxInflightBlocks: 5
+          snapshotIntervalSize: 16777216
+          tickInterval: 500ms
+      ordererType: etcdraft
+      policies: null
+      state: STATE_NORMAL
+    policies: null
+  externalOrdererOrganizations: []
+  externalPeerOrganizations: []
+  identities:
+    OrdererMSP:
+      secretKey: user.yaml
+      secretName: orderer-orderermsp-admin-tls
+      secretNamespace: default
+    OrdererMSP-sign:
+      secretKey: user.yaml
+      secretName: orderer-orderermsp-admin-sign
+      secretNamespace: default
+    Org1MSP:
+      secretKey: user.yaml
+      secretName: org1msp-admin
+      secretNamespace: default
+    Org2MSP:
+      secretKey: user.yaml
+      secretName: org2msp-admin
+      secretNamespace: default
+  name: demo
+  ordererOrganizations:
+    - caName: ord-ca
+      caNamespace: default
+      externalOrderersToJoin:
+        - host: ord-node1
+          port: 7053
+      mspID: OrdererMSP
+      ordererEndpoints:
+        - ord-node1:7050
+      orderersToJoin: []
+  orderers:
+    - host: ord-node1
+      port: 7050
+      tlsCert: |-
+        -----BEGIN CERTIFICATE-----
+        MIIC2DCCAn6gAwIBAgIUHmGcFbrobHDro5CO0tUDQ8K9puUwCgYIKoZIzj0EAwIw
+        bTELMAkGA1UEBhMCRVMxETAPBgNVBAcTCEFsaWNhbnRlMREwDwYDVQQJEwhBbGlj
+        YW50ZTEZMBcGA1UEChMQS3VuZyBGdSBTb2Z0d2FyZTENMAsGA1UECxMEVGVjaDEO
+        MAwGA1UEAxMFdGxzY2EwHhcNMjQwNzEyMTAxNTU0WhcNMjUwNzEzMTAxODAwWjAk
+        MRAwDgYDVQQLEwdvcmRlcmVyMRAwDgYDVQQDEwdvcmRlcmVyMFkwEwYHKoZIzj0C
+        AQYIKoZIzj0DAQcDQgAEr39D635pBYb6+u12VErU+IvUdI4lQAZhdXogoWZ36BLR
+        LnoIXiHCmVyKTKYLlR6Ia5FZO+Q/ZHuHBRDmVjHayKOCAUMwggE/MA4GA1UdDwEB
+        /wQEAwIDqDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/
+        BAIwADAdBgNVHQ4EFgQUY0cKbQ810yc2UFhtJrE54OJzg6IwKwYDVR0jBCQwIoAg
+        APZtrlVuy8FztZkdauc7VT469uUdhu/Myz5wTq+9yz0wVwYDVR0RBFAwToIJbG9j
+        YWxob3N0gglvcmQtbm9kZTGCEW9yZC1ub2RlMS5kZWZhdWx0ghdvcmRlcmVyMC1v
+        cmQubG9jYWxoby5zdIcEfwAAAYcErBIAAjBbBggqAwQFBgcIAQRPeyJhdHRycyI6
+        eyJoZi5BZmZpbGlhdGlvbiI6IiIsImhmLkVucm9sbG1lbnRJRCI6Im9yZGVyZXIi
+        LCJoZi5UeXBlIjoib3JkZXJlciJ9fTAKBggqhkjOPQQDAgNIADBFAiEAstlWZY44
+        ybFsFEkGgcc5ld8rfgGyrL0MqPX/TzGsZwUCIA5gDznwkFT6LNIzDxSzmvS6ZEmz
+        87hMn/87U7LrYHjv
+        -----END CERTIFICATE-----
+  peerOrganizations:
+    - caName: org1-ca
+      caNamespace: default
+      mspID: Org1MSP
+    - caName: org2-ca
+      caNamespace: default
+      mspID: Org2MSP

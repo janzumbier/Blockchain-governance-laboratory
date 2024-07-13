@@ -1,0 +1,40 @@
+---
+- name: Check SSRM
+  hosts: localhost
+  vars_files:
+     - config/nodefailure_config.json
+
+  tasks:
+    - name: Read JSON file
+      ansible.builtin.include_vars:
+        file: config/nodefailure_config.json
+        name: nodefailureconfig
+
+    - name: Get amount of peers of target
+      shell: kubectl get pods --no-headers -o custom-columns=":metadata.name" | grep '^org2-peer' | wc -l
+      register: amountPeers
+
+    - name: Parsing output
+      set_fact:
+        peer_output: "{{amountPeers.stdout | regex_replace('^\\s+', '')}}"
+
+    - name: Compare the amount of peers with SSRM
+      debug:
+        msg: "The amount of peers do not match the SSRM"
+      when: peer_output != "2" 
+
+    - name: Get amount of replicas of each peer
+      shell: kubectl get deployment -o custom-columns="NAME:.metadata.name,REPLICAS:.status.replicas" | grep '^org2-peer'
+      register: peerreplicas
+
+    - name: Split lines and convert to JSON
+      set_fact:
+        replicas: "{{ peerreplicas.stdout_lines | map('regex_replace', '\\s+', ' ') | map('split', ' ') | map('to_json') | join(',') | regex_replace('(^)', '[') | regex_replace('($)', ']') }}"
+
+    - name: Print message if the value is not equal to one
+      debug:
+        msg: "The amount of replicas do not match the SSRM"
+      when: item.1 != "1"
+      loop: "{{ replicas }}"
+      loop_control:
+        loop_var: item

@@ -1,0 +1,21 @@
+---
+- name: Creating configured channels
+  hosts: localhost
+  vars_files:
+     - config/nodefailure_config.json
+
+  tasks:
+    - name: Read JSON file
+      ansible.builtin.include_vars:
+        file: config/nodefailure_config.json
+        name: nodefailureconfig
+
+    - name: Modify main channel
+      include_tasks: change_main_channel.yaml
+
+    - name: Deletig resources
+      include_tasks: delete_resources.yaml
+        
+      
+
+    

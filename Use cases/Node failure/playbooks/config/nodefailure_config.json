@@ -1,0 +1,11 @@
+{
+    "NodefailureConfig": {
+        "targetmspid": "Org2MSP",
+        "channelname": "demo",
+        "minpeers": 2,
+        "minreplicas": 1,
+        "chaincode": "token",
+        "transaction": "init -a '[]'",
+        "injectormspid":"Org1MSP"
+    }
+}

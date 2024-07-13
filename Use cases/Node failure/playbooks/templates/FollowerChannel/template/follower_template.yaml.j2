@@ -1,0 +1,9 @@
+{% macro remove_initial_tabs(line) %}
+{{ line | replace('    ', '', 4) }}
+{% endmacro %}
+apiVersion: hlf.kungfusoftware.es/v1alpha1
+kind: FabricFollowerChannel
+metadata:
+  name: {{channel_name}}-{{org_name}}msp
+spec: 
+  {{specfollower_name | indent(2)}}

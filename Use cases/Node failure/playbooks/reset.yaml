@@ -1,0 +1,17 @@
+---
+- name: Reset changes
+  hosts: localhost
+  vars_files:
+     - config/nodefailure_config.json
+
+  tasks:
+    - name: Read JSON file
+      ansible.builtin.include_vars:
+        file: config/nodefailure_config.json
+        name: nodefailureconfig
+
+    - name: apply main channel
+      shell: kubectl apply -f templates/MainChannel/backup/demo.yaml
+
+    - name: apply follower channel
+      shell: kubectl apply -f templates/FollowerChannel/backup/demo-org2msp.yaml
