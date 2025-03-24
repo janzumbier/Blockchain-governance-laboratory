@@ -2,15 +2,11 @@ apiVersion: hlf.kungfusoftware.es/v1alpha1
 kind: FabricMainChannel
 metadata:
   name: demo
-spec:
-  name: demo
+spec: 
   adminOrdererOrganizations:
     - mspID: OrdererMSP
-    
   adminPeerOrganizations:
     - mspID: Org1MSP
-    - mspID: Org2MSP
-    
   channelConfig:
     application:
       acls: null
@@ -39,23 +35,8 @@ spec:
       state: STATE_NORMAL
     policies: null
   externalOrdererOrganizations: []
-  peerOrganizations:
-    - mspID: Org1MSP
-      caName: "org1-ca"
-      caNamespace: "default"
-    - mspID: Org2MSP
-      caName: "org2-ca"
-      caNamespace: "default"
-    
+  externalPeerOrganizations: []
   identities:
-    Org1MSP:
-      secretKey: user.yaml
-      secretName: org1msp-admin
-      secretNamespace: default
-    Org2MSP:
-      secretKey: user.yaml
-      secretName: org2msp-admin
-      secretNamespace: default
     OrdererMSP:
       secretKey: user.yaml
       secretName: orderer-orderermsp-admin-tls
@@ -64,41 +45,54 @@ spec:
       secretKey: user.yaml
       secretName: orderer-orderermsp-admin-sign
       secretNamespace: default
-    
-  externalPeerOrganizations: []
+    Org1MSP:
+      secretKey: user.yaml
+      secretName: org1msp-admin
+      secretNamespace: default
+  name: demo
   ordererOrganizations:
-  - caName: "ord-ca"
-    caNamespace: "default"
-    externalOrderersToJoin:
-      - host: ord-node1
-        port: 7053
-      
-    mspID: OrdererMSP
-    ordererEndpoints:
-      - ord-node1:7050
-      
-    orderersToJoin: []
+    - caName: ord-ca
+      caNamespace: default
+      externalOrderersToJoin:
+        - host: ord-node1
+          port: 7053
+      mspID: OrdererMSP
+      ordererEndpoints:
+        - ord-node1:7050
+      orderersToJoin: []
+      signCACert: ""
+      tlsCACert: ""
   orderers:
     - host: ord-node1
       port: 7050
       tlsCert: |-
         -----BEGIN CERTIFICATE-----
-        MIIC2DCCAn6gAwIBAgIUGROGaGKuMAwWhxZ3hS5pGVpo3YQwCgYIKoZIzj0EAwIw
+        MIIC1zCCAn6gAwIBAgIUbnerPF3yrbvz0jUdRFL0qVmHjLwwCgYIKoZIzj0EAwIw
         bTELMAkGA1UEBhMCRVMxETAPBgNVBAcTCEFsaWNhbnRlMREwDwYDVQQJEwhBbGlj
         YW50ZTEZMBcGA1UEChMQS3VuZyBGdSBTb2Z0d2FyZTENMAsGA1UECxMEVGVjaDEO
-        MAwGA1UEAxMFdGxzY2EwHhcNMjQwNDI1MTQxNDE0WhcNMjUwNDI2MTQzNjAwWjAk
+        MAwGA1UEAxMFdGxzY2EwHhcNMjQwNzAyMTIxNzU2WhcNMjUwNzAzMTIxOTAwWjAk
         MRAwDgYDVQQLEwdvcmRlcmVyMRAwDgYDVQQDEwdvcmRlcmVyMFkwEwYHKoZIzj0C
-        AQYIKoZIzj0DAQcDQgAE2cY9eEf/SJiJXLQvoKgiRqQT0wr28hepNZGHMKGfQ+kx
-        ABfTbY74DkeCRqwz7qnsjqe2iThx0KMPQQqQ1telraOCAUMwggE/MA4GA1UdDwEB
+        AQYIKoZIzj0DAQcDQgAElcOG+pxwOIBB+blj8dM6lz/yspkAc2GbRheatCOl+m+6
+        LrFFxG6mLwJmpD8hoo9vD8TSOZOcOLyP5+kAuNpqwqOCAUMwggE/MA4GA1UdDwEB
         /wQEAwIDqDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/
-        BAIwADAdBgNVHQ4EFgQUpikjF9lSQxvG46cpUpiEioogntUwKwYDVR0jBCQwIoAg
-        6sWnOGFkgTUfKC4a11q0TCZ56HEIkBt2spsIvWiWRrAwVwYDVR0RBFAwToIJbG9j
+        BAIwADAdBgNVHQ4EFgQUJef2UZXJSoKOxm+j0lwI+p3EU6cwKwYDVR0jBCQwIoAg
+        J0pQjZbPp00RYcM+YG99Z2Otmh6FnhKb3V9npJ4xz1QwVwYDVR0RBFAwToIJbG9j
         YWxob3N0gglvcmQtbm9kZTGCEW9yZC1ub2RlMS5kZWZhdWx0ghdvcmRlcmVyMC1v
         cmQubG9jYWxoby5zdIcEfwAAAYcErBIAAjBbBggqAwQFBgcIAQRPeyJhdHRycyI6
         eyJoZi5BZmZpbGlhdGlvbiI6IiIsImhmLkVucm9sbG1lbnRJRCI6Im9yZGVyZXIi
-        LCJoZi5UeXBlIjoib3JkZXJlciJ9fTAKBggqhkjOPQQDAgNIADBFAiEAgrZGwal9
-        Ja4MwoJOV0w3fuKtmVj+L1R0diCajhDTjnkCIAGxHOJDlIx5Fp4Dk1FLRWXtojDp
-        nohYm+J3Rb5dejcQ
+        LCJoZi5UeXBlIjoib3JkZXJlciJ9fTAKBggqhkjOPQQDAgNHADBEAiBZooDOGMxW
+        R7WAbimNL9T7Qu4NLUsFM4aZfxQ4mDpSpwIgH/MHCCiDUc0jLpWi6dRsl9RfYtCI
+        uEjiPFfZGK9emKU=
         -----END CERTIFICATE-----
-
-    
+  peerOrganizations:
+# BEGIN ANSIBLE MANAGED BLOCK - peerOrganizations
+    - caName: org3-ca
+      caNamespace: default
+      mspID: Org3MSP
+# END ANSIBLE MANAGED BLOCK - peerOrganizations
+    - caName: org3-ca
+      caNamespace: default
+      mspID: Org3MSP
+    - caName: org1-ca
+      caNamespace: default
+      mspID: Org1MSP

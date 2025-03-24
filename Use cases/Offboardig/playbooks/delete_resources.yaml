@@ -2,11 +2,17 @@
   - block:
       - name: Setting metadata for main channel
         set_fact:
-          channel_name: "demo"
-          org_name: "org3"
+          channel_name: "jdemo"
+          org_name: "jserviceprovider"
          
       - name: Delete follower channel
         shell: kubectl get fabricfollowerchannels.hlf.kungfusoftware.es --no-headers | grep '^{{channel_name}}-{{org_name}}' | awk '{print $1}' | xargs kubectl delete fabricfollowerchannels.hlf.kungfusoftware.es
+
+      - name: Delete identities 
+        shell: kubectl get fabricidentities.hlf.kungfusoftware.es --no-headers | grep '^{{org_name}}' | awk '{print $1}' | xargs kubectl delete fabricidentities.hlf.kungfusoftware.es
+
+      - name: Delete configmaps 
+        shell: kubectl get configmaps --no-headers | grep '^{{org_name}}' | awk '{print $1}' | xargs kubectl delete configmaps
 
       - name: Delete peers 
         shell: kubectl get fabricpeers.hlf.kungfusoftware.es --no-headers | grep '^{{org_name}}' | awk '{print $1}' | xargs kubectl delete fabricpeers.hlf.kungfusoftware.es
@@ -17,12 +23,8 @@
       - name: Delete cas 
         shell: kubectl get fabriccas.hlf.kungfusoftware.es  --no-headers | grep '^{{org_name}}' | awk '{print $1}' | xargs kubectl delete fabriccas.hlf.kungfusoftware.es 
 
-      - name: Delete identities 
-        shell: kubectl get fabricidentities.hlf.kungfusoftware.es --no-headers | grep '^{{org_name}}' | awk '{print $1}' | xargs kubectl delete fabricidentities.hlf.kungfusoftware.es
+      - name: Delete network config
+        shell: kubectl get fabricnetworkconfig.hlf.kungfusoftware.es  --no-headers | grep '^{{org_name}}' | awk '{print $1}' | xargs kubectl delete fabricnetworkconfig.hlf.kungfusoftware.es
 
       - name: Delete secrets 
         shell: kubectl get secrets --no-headers | grep '^{{org_name}}' | awk '{print $1}' | xargs kubectl delete secrets
-
-      - name: Delete configmaps 
-        shell: kubectl get configmaps --no-headers | grep '^{{org_name}}' | awk '{print $1}' | xargs kubectl delete configmaps
-        

@@ -12,10 +12,10 @@
 
 
     - name: Fetching connection profile of each organisation
-      shell: kubectl get secret org1msp-cp -o jsonpath="{.data.config\.yaml}" | base64 --decode > certificates/org1msp-cp.yaml
+      shell: kubectl get secret jorg1msp-cp -o jsonpath="{.data.config\.yaml}" | base64 --decode > certificates/jorg1msp-cp.yaml
 
     - name: execute transaction
-      shell: kubectl hlf chaincode invoke --config=certificates/org1msp-cp.yaml --user=org1msp-admin-default --peer=org1-peer0.default --chaincode=token --channel=demo --fcn=init -a '[]'
+      shell: kubectl hlf chaincode invoke --config=certificates/jorg1msp-cp.yaml --user=jorg1msp-admin-hlf-operator-experiment-2 --peer=jorg1-peer0.hlf-operator-experiment-2 --chaincode=token --channel=jdemo --fcn=init -a '[]'
       register: command_output
       ignore_errors: true
     

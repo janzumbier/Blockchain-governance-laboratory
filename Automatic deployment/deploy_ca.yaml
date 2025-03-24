@@ -11,6 +11,8 @@
       ansible.builtin.set_fact:
         peer_ca: "{{ networkconfig | json_query('networkConfig.peerOrganisations[*].certificateAuthorities[*][]')}}"
         orderer_ca: "{{ networkconfig | json_query('networkConfig.ordererOrganisations[*].certificateAuthorities[*][]')}}"
+        namespace: "hlf-operator-experiment-2"
+        storageclass: "ocs-storagecluster-2-cephfs"
 
     
     - name: Print detected configuration for peer-orgs
@@ -19,7 +21,7 @@
       loop: "{{ peer_ca}}"
     
     - name: Deploy Peer cas
-      command: kubectl hlf ca create --storage-class=standard --capacity={{ item.capacity }} --name={{ item.name  }} --enroll-id=enroll --enroll-pw=enrollpw --hosts={{ item.hosts  }} --istio-port={{ item.istioport }} 
+      command: kubectl hlf ca create --storage-class={{ storageclass }} --capacity={{ item.capacity }} --name={{ item.name  }} --enroll-id=enroll --enroll-pw=enrollpw --hosts={{ item.hosts  }} --istio-port={{ item.istioport }} --namespace={{ namespace }} 
       loop: "{{ peer_ca }}"
 
     - name: Print detected configuration for orderer-orgs
@@ -28,5 +30,5 @@
       loop: "{{ orderer_ca }}"
     
     - name: Deploy orderer cas
-      command: kubectl hlf ca create --storage-class=standard --capacity={{ item.capacity }} --name={{ item.name }} --enroll-id=enroll --enroll-pw=enrollpw --hosts={{ item.hosts }} --istio-port={{ item.istioport }} 
+      command: kubectl hlf ca create --storage-class={{ storageclass }} --capacity={{ item.capacity }} --name={{ item.name }} --enroll-id=enroll --enroll-pw=enrollpw --hosts={{ item.hosts }} --istio-port={{ item.istioport }}  --namespace={{ namespace }} 
       loop: "{{ orderer_ca }}"

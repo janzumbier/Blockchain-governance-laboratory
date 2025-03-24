@@ -11,8 +11,9 @@
 
       - name: Convert spec
         set_fact:
-          channel: "{{ onboardingconfig | json_query('OffboardingConfig.channels[*]')}}"
-          chaincode_name: "{{ onboardingconfig | json_query('OffboardingConfig.channels[0].chaincodes[0].name')}}"
+          channel: "{{ offboardingconfig | json_query('OffboardingConfig.channels[*]')}}"
+          chaincode_name: "{{ offboardingconfig | json_query('OffboardingConfig.channels[0].chaincodes[0].name')}}"
+          namespace: "hlf-operator-experiment-2"
 
       - name: Getting package id 
         shell: kubectl get fabricchaincodes.hlf.kungfusoftware.es/token -o yaml | yq eval '.spec.packageId'
@@ -22,8 +23,13 @@
         set_fact:
             pid_out: "{{ pid.stdout }}"
 
+      - name: Test
+        debug:
+          msg: "{{channel}}"
+            
+
       - name: Creating a network configuration for each organisation
-        command: kubectl hlf networkconfig create --name={{item.1.mspid | lower}}-cp -o {{item.1.mspid}} -o OrdererMSP -c {{ item.0.name }} --identities={{item.1.mspid | lower}}-admin.default --secret={{item.1.mspid | lower}}-cp
+        command: kubectl hlf networkconfig create --name={{item.1.mspid | lower}}-cp -o {{item.1.mspid}} -o jOrdererMSP -c {{ item.0.name }} --identities={{item.1.mspid | lower}}-admin.{{namespace}} --secret={{item.1.mspid | lower}}-cp
         loop: "{{ channel | subelements('peerparticipants') }}"
         ignore_errors: true
 
@@ -33,7 +39,7 @@
         ignore_errors: true
 
       - name: Approve the chaincode for all organisations
-        command: kubectl hlf chaincode approveformyorg --config=certificates/{{item.1.mspid | lower}}-cp.yaml --user={{item.1.mspid | lower}}-admin-default --peer={{item.1.peer}}.default --package-id={{pid_out}} --version "{{item.0.chaincodes[0].version}}" --sequence "{{item.0.chaincodes[0].sequence}}" --name={{item.0.chaincodes[0].name}} --policy="{{item.0.chaincodes[0].policy}}" --channel={{item.0.name}}
+        command: kubectl hlf chaincode approveformyorg --config=certificates/{{item.1.mspid | lower}}-cp.yaml --user={{item.1.mspid | lower}}-admin-{{namespace}} --peer={{item.1.peer}}.{{namespace}} --package-id={{pid_out}} --version "{{item.0.chaincodes[0].version}}" --sequence "{{item.0.chaincodes[0].sequence}}" --name={{item.0.chaincodes[0].name}} --policy="{{item.0.chaincodes[0].policy}}" --channel={{item.0.name}}
         loop: "{{ channel | subelements('peerparticipants') }}"
         ignore_errors: true
 
@@ -42,5 +48,5 @@
           seconds: 30
 
       - name: Committing chaincode for all organisations
-        command: kubectl hlf chaincode commit --config=certificates/{{channel[0].peerparticipants[0].mspid | lower}}-cp.yaml --user={{channel[0].peerparticipants[0].mspid | lower}}-admin-default --mspid={{channel[0].peerparticipants[0].mspid}}  --version "{{channel[0].chaincodes[0].version}}" --sequence "{{channel[0].chaincodes[0].sequence}}" --name={{channel[0].chaincodes[0].name}} --policy="{{channel[0].chaincodes[0].policy}}" --channel={{channel[0].name}}
+        command: kubectl hlf chaincode commit --config=certificates/{{channel[0].peerparticipants[0].mspid | lower}}-cp.yaml --user={{channel[0].peerparticipants[0].mspid | lower}}-admin-{{namespace}} --mspid={{channel[0].peerparticipants[0].mspid}}  --version "{{channel[0].chaincodes[0].version}}" --sequence "{{channel[0].chaincodes[0].sequence}}" --name={{channel[0].chaincodes[0].name}} --policy="{{channel[0].chaincodes[0].policy}}" --channel={{channel[0].name}}
       

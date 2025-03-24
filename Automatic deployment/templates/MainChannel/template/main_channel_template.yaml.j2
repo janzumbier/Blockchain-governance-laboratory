@@ -65,7 +65,7 @@ spec:
   ordererOrganizations:
 {% for orderer_org in networkConfig.ordererOrganisations %}
   - caName: "{{ orderer_org.certificateAuthorities[0].name }}"
-    caNamespace: "default"
+    caNamespace: "hlf-operator-experiment-2"
     externalOrderersToJoin:
       {% for orderer in orderer_org.orderers -%}
         - host: {{ orderer.name }}

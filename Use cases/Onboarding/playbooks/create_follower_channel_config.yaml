@@ -2,7 +2,7 @@
   - block:
     - name: Setting metadata
       ansible.builtin.set_fact:
-        targetchannel: "demo"
+        targetchannel: "jdemo"
         targetmspid: "{{ peer_org.mspid }}"
         peer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*]')}}"
         #### What about downtime??? TODO
@@ -22,24 +22,24 @@
         metadata_name: "{{targetchannel | lower}}-{{targetmspid | lower}}"
         secretKey: "user.yaml"
         secretName: "{{targetmspid | lower}}-admin"
-        secretNamespace: "default"
-        url: "grpcs://{{first_orderer.name}}.default:7050"
+        secretNamespace: "hlf-operator-experiment-2"
+        url: "grpcs://{{first_orderer.name}}.hlf-operator-experiment-2:7050"
 
     - name: Getting anchor peers
       ansible.builtin.set_fact:
-        anchor_peers: "{{ anchor_peers + [{'host': (item.name)~'.default' , 'port': 7051}] }}"
+        anchor_peers: "{{ anchor_peers + [{'host': (item.name)~'.hlf-operator-experiment-2' , 'port': 7051}] }}"
       loop: "{{ peer_org.peers }}"
 
 
     - name: Find Peer Organization with MSP ID Org1MSP
       ansible.builtin.set_fact:
-        peers_to_join: "{{ peers_to_join + [{'name': item.name, 'namespace': 'default'}] }}"
+        peers_to_join: "{{ peers_to_join + [{'name': item.name, 'namespace': 'hlf-operator-experiment-2'}] }}"
       loop: "{{ peer_org.peers }}"
 
     - name: Getting orderer parameters
       shell: |
         IDENT_8=$(printf "%8s" "")
-        ORDERER0_TLS_CERT=$(kubectl get fabricorderernodes ord-node1 -o=jsonpath='{.status.tlsCert}' | sed -e "s/^/${IDENT_8}/")
+        ORDERER0_TLS_CERT=$(kubectl get fabricorderernodes jord-node1 -o=jsonpath='{.status.tlsCert}' | sed -e "s/^/${IDENT_8}/")
         echo "${ORDERER0_TLS_CERT}"
       register: certificate
 

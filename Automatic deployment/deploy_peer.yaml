@@ -10,6 +10,8 @@
     - name: Load all peer organisations from network config
       ansible.builtin.set_fact:
         peer_organisations: "{{ networkconfig | json_query('networkConfig.peerOrganisations[*]')}}"
+        namespace: "hlf-operator-experiment-2"
+        storageclass: "ocs-storagecluster-2-cephfs"
 
     - name: Print peer organisations
       debug:
@@ -17,11 +19,11 @@
       with_items: "{{ peer_organisations }}"
 
     - name: Register user peer
-      command : kubectl hlf ca register --name={{ item.certificateAuthorities[0].name }} --user=peer --secret=peerpw --type=peer --enroll-id=enroll --enroll-secret=enrollpw --mspid={{item.mspid}}
+      command : kubectl hlf ca register --name={{ item.certificateAuthorities[0].name }} --user=peer --secret=peerpw --type=peer --enroll-id=enroll --enroll-secret=enrollpw --mspid={{item.mspid}} --namespace={{namespace}}
       loop: "{{ peer_organisations}}"
       ignore_errors: true
 
     - name: Deploy each peer of each organization
-      command: kubectl hlf peer create --statedb=couchdb --image=hyperledger/fabric-peer --version=2.4.6 --storage-class=standard --enroll-id=peer --mspid={{ item.0.mspid }} --enroll-pw=peerpw --capacity={{item.1.capacity}} --name={{item.1.name}}
-       --ca-name={{item.1.caname}} --hosts={{item.1.hosts}} --istio-port={{item.1.istioport}}
+      command: kubectl hlf peer create --statedb=couchdb --image=hyperledger/fabric-peer --version=2.4.6 --storage-class={{ storageclass }} --enroll-id=peer --mspid={{ item.0.mspid }} --enroll-pw=peerpw --capacity={{item.1.capacity}} --name={{item.1.name}}
+       --ca-name={{item.1.caname}} --hosts={{item.1.hosts}} --istio-port={{item.1.istioport}} --namespace={{namespace}}
       loop: "{{ peer_organisations | subelements('peers') }}"

@@ -1,7 +1,7 @@
 {
     "NodefailureConfig": {
-        "targetmspid": "Org2MSP",
-        "channelname": "demo",
+        "targetmspid": "Org3MSP",
+        "channelname": "jdemo",
         "minpeers": 2,
         "minreplicas": 1,
         "chaincode": "token",

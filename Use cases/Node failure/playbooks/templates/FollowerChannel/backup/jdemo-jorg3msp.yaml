@@ -1,0 +1,6 @@
+apiVersion: hlf.kungfusoftware.es/v1alpha1
+kind: FabricFollowerChannel
+metadata:
+  name: jdemo-jorg3msp
+spec: 
+  null

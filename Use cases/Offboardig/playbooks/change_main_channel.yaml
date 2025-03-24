@@ -2,20 +2,21 @@
   - block:
       - name: Setting metadata for main channel
         set_fact:
-          channel_name: "demo"
-          new_identity_key: Org3MSP
-          peer_org_caName_to_remove: org3-ca
+          channel_name: "jdemo"
+          new_identity_key: jOrg3MSP
+          peer_org_caName_to_remove: jorg3-ca
           new_identity:
             secretKey: user.yaml
-            secretName: org3msp-admin
+            secretName: jorg3msp-admin
             secretNamespace: default
           new_peer_org:
-            caName: org3-ca
+            caName: jorg3-ca
             caNamespace: default
-            mspID: Org3MSP
+            mspID: jOrg3MSP
+          namespace: "hlf-operator-experiment-2"
 
       - name: Getting orderer parameters
-        shell: kubectl get fabricmainchannels.hlf.kungfusoftware.es/demo -o yaml | yq eval '.spec'
+        shell: kubectl get fabricmainchannels.hlf.kungfusoftware.es/jdemo -o yaml | yq eval '.spec'
         register: spec
 
       - name: Convert spec
@@ -30,19 +31,19 @@
       - name: Delete entry from adminPeerOrganizations section in YAML file
         ansible.builtin.replace:
           path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
-          regexp: '(\s*-\s*mspID:\s*Org3MSP\s*\n)'
+          regexp: '(\s*-\s*mspID:\s*{{new_identity_key}}\s*\n)'
           replace: '\n'
 
       - name: Delete entry from identities section in YAML file
         ansible.builtin.replace:
           path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
-          regexp: '(\s*Org3MSP:\s*\n\s*secretKey:\s*user.yaml\s*\n\s*secretName:\s*org3msp-admin\s*\n\s*secretNamespace:\s*default\s*\n)'
+          regexp: '(\s*{{new_identity_key}}:\s*\n\s*secretKey:\s*user.yaml\s*\n\s*secretName:\s*{{new_identity_key | lower}}-admin\s*\n\s*secretNamespace:\s*{{namespace}}\s*\n)'
           replace: '\n'
 
       - name: Delete entries from peer section in YAML file
         ansible.builtin.replace:
           path: templates/MainChannel/generatedConfigs/{{ channel_name }}.yaml
-          regexp: '(\s*-\s*caName:\s*org3-ca\s*\n\s*caNamespace:\s*default\s*\n\s*mspID:\s*Org3MSP\s*\n)'
+          regexp: '(\s*-\s*caName:\s*{{peer_org_caName_to_remove}}\s*\n\s*caNamespace:\s*{{namespace}}\s*\n\s*mspID:\s*{{new_identity_key}}\s*\n)'
           replace: '\n'
 
       - name: Apply Main channel file 

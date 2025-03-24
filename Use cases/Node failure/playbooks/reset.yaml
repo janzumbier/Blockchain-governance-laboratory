@@ -11,7 +11,7 @@
         name: nodefailureconfig
 
     - name: apply main channel
-      shell: kubectl apply -f templates/MainChannel/backup/demo.yaml
+      shell: kubectl apply -f templates/MainChannel/backup/jdemo.yaml
 
     - name: apply follower channel
-      shell: kubectl apply -f templates/FollowerChannel/backup/demo-org2msp.yaml
+      shell: kubectl apply -f templates/FollowerChannel/backup/jdemo-jorg3msp.yaml

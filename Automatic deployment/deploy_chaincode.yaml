@@ -2,7 +2,7 @@
 - name: Deploys and installs an external chaincode for all configured organisations
   hosts: localhost
   vars:
-    channel: "demo"
+    channel: "jdemo"
     chaincode_name: "token"
   tasks:
 
@@ -14,15 +14,17 @@
     - name: Loading all peer organisations from network config
       ansible.builtin.set_fact:
         peer_organisations: "{{ networkconfig | json_query('networkConfig.peerOrganisations[*]')}}"
+        namespace: "hlf-operator-experiment-2"
+        storageclass: "ocs-storagecluster-2-cephfs"
 
     - name: Register user admin for each organisations
-      command: kubectl hlf identity create --name {{item.mspid | lower}}-admin --namespace default --ca-name {{ item.certificateAuthorities[0].name }} --ca-namespace default --ca ca --mspid {{item.mspid}} --enroll-id admin --enroll-secret adminpw --ca-enroll-id=enroll --ca-enroll-secret=enrollpw --ca-type=admin
+      command: kubectl hlf identity create --name {{item.mspid | lower}}-admin --namespace {{ namespace }} --ca-name {{ item.certificateAuthorities[0].name }} --ca-namespace {{ namespace }} --ca ca --mspid {{item.mspid}} --enroll-id admin --enroll-secret adminpw --ca-enroll-id=enroll --ca-enroll-secret=enrollpw --ca-type=admin --namespace={{namespace}}
       loop: "{{peer_organisations}}"
       ignore_errors: true
 
       ### TODO ORDERER ADJSUTMENTS
     - name: Creating a network configuration for each organisation
-      command: kubectl hlf networkconfig create --name={{item.mspid | lower}}-cp -o {{item.mspid}} -o OrdererMSP -c {{ channel }} --identities={{item.mspid | lower}}-admin.default --secret={{item.mspid | lower}}-cp
+      command: kubectl hlf networkconfig create --name={{item.mspid | lower}}-cp -o {{item.mspid}} -o jOrdererMSP -c {{ channel }} --identities={{item.mspid | lower}}-admin.{{ namespace }} --secret={{item.mspid | lower}}-cp --namespace={{namespace}}
       loop: "{{ peer_organisations}}"
       ignore_errors: true
 
@@ -59,14 +61,14 @@
         msg: " {{package_id.stdout }} "
 
     - name: Installing chaincode on all peers
-      command: kubectl hlf chaincode install --path=chaincode/chaincode.tgz --config=certificates/{{item.0.mspid | lower}}-cp.yaml --language=java --label={{chaincode_name}} --user={{item.0.mspid | lower}}-admin-default --peer={{item.1.name}}.default
+      command: kubectl hlf chaincode install --path=chaincode/chaincode.tgz --config=certificates/{{item.0.mspid | lower}}-cp.yaml --language=java --label={{chaincode_name}} --user={{item.0.mspid | lower}}-admin-{{ namespace }} --peer={{item.1.name}}.{{ namespace }}
       loop: "{{ peer_organisations | subelements('peers') }}"
 
     - name: Deploy chaincode container to cluster
-      command: kubectl hlf externalchaincode sync --image=janzumbier/tokencontract:latest --name={{chaincode_name}} --namespace=default --package-id={{package_id.stdout}} --tls-required=false --replicas=1 --env=CORE_CHAINCODE_ID_NAME={{package_id.stdout}}
+      command: kubectl hlf externalchaincode sync --image=janzumbier/tokencontract:latest --name={{chaincode_name}} --namespace={{ namespace }} --package-id={{package_id.stdout}} --tls-required=false --replicas=1 --env=CORE_CHAINCODE_ID_NAME={{package_id.stdout}}
 
     - name: Approve the chaincode for all organisations
-      command: kubectl hlf chaincode approveformyorg --config=certificates/{{item.mspid | lower}}-cp.yaml --user={{item.mspid | lower}}-admin-default --peer={{item.peers[0].name}}.default --package-id={{package_id.stdout}} --version "1.0" --sequence "1" --name={{chaincode_name}} --policy="AND('Org1MSP.member', 'Org2MSP.member')" --channel={{channel}}
+      command: kubectl hlf chaincode approveformyorg --config=certificates/{{item.mspid | lower}}-cp.yaml --user={{item.mspid | lower}}-admin-{{ namespace }} --peer={{item.peers[0].name}}.{{ namespace }} --package-id={{package_id.stdout}} --version "1.0" --sequence "1" --name={{chaincode_name}} --policy="OR('jOrg1MSP.member')" --channel={{channel}}
       loop: "{{peer_organisations}}"
 
     - name: pause for 30 seconds
@@ -74,4 +76,4 @@
         seconds: 30
 
     - name: Committing chaincode for all organisations
-      command: kubectl hlf chaincode commit --config=certificates/{{peer_organisations[0].mspid | lower}}-cp.yaml --user={{peer_organisations[0].mspid | lower}}-admin-default --mspid={{peer_organisations[0].mspid}}  --version "1.0" --sequence "1" --name={{chaincode_name}} --policy="AND('Org1MSP.member', 'Org2MSP.member')" --channel={{channel}}
+      command: kubectl hlf chaincode commit --config=certificates/{{peer_organisations[0].mspid | lower}}-cp.yaml --user={{peer_organisations[0].mspid | lower}}-admin-{{ namespace }} --mspid={{peer_organisations[0].mspid}}  --version "1.0" --sequence "1" --name={{chaincode_name}} --policy="OR('jOrg1MSP.member')" --channel={{channel}}

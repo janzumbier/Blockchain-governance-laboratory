@@ -2,20 +2,20 @@
   - block:
       - name: Setting metadata for main channel
         set_fact:
-          channel_name: "demo"
-          new_identity_key: Org3MSP
-          peer_org_caName_to_remove: org3-ca
+          channel_name: "jdemo"
+          new_identity_key: jOrg3MSP
+          peer_org_caName_to_remove: jorg3-ca
           new_identity:
             secretKey: user.yaml
             secretName: org3msp-admin
-            secretNamespace: default
+            secretNamespace: hlf-operator-experiment-2
           new_peer_org:
-            caName: org3-ca
-            caNamespace: default
-            mspID: Org3MSP
+            caName: jorg3-ca
+            caNamespace: hlf-operator-experiment-2
+            mspID: jOrg3MSP
 
       - name: Getting orderer parameters
-        shell: kubectl get fabricmainchannels.hlf.kungfusoftware.es/demo -o yaml | yq eval '.spec'
+        shell: kubectl get fabricmainchannels.hlf.kungfusoftware.es/jdemo -o yaml | yq eval '.spec'
         register: spec
 
       - name: Convert spec

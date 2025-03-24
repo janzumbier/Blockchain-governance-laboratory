@@ -10,8 +10,14 @@
         file: config/nodefailure_config.json
         name: nodefailureconfig
 
+    - name: Setting metadata for main channel
+      set_fact:
+        channel_name: "jdemo"
+        new_identity_key: "jOrg3MSP"
+        org_prefix: "jorg3"
+
     - name: Get amount of peers of target
-      shell: kubectl get pods --no-headers -o custom-columns=":metadata.name" | grep '^org2-peer' | wc -l
+      shell: kubectl get pods --no-headers -o custom-columns=":metadata.name" | grep '^{{org_prefix}}-peer' | wc -l
       register: amountPeers
 
     - name: Parsing output
@@ -24,7 +30,7 @@
       when: peer_output != "2" 
 
     - name: Get amount of replicas of each peer
-      shell: kubectl get deployment -o custom-columns="NAME:.metadata.name,REPLICAS:.status.replicas" | grep '^org2-peer'
+      shell: kubectl get deployment -o custom-columns="NAME:.metadata.name,REPLICAS:.status.replicas" | grep '^{{org_prefix}}-peer'
       register: peerreplicas
 
     - name: Split lines and convert to JSON

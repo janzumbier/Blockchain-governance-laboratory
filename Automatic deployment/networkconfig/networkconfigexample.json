@@ -3,57 +3,104 @@
         "name": "HLFNetwork",
         "peerOrganisations": [
             {
-                "name": "Org1",
-                "mspid": "Org1MSP",
+                "name": "Roaster1",
+                "mspid": "roaster1",
                 "peers": [
                     {
-                        "name":"org1-peer0",
+                        "name":"jroaster1-peer0",
                         "capacity":"5Gi",
-                        "caname":"org1-ca.default",
-                        "hosts":"peer0-org1.localho.st",
-                        "istioport": 443
-                    },
-                    {
-                        "name":"org1-peer1", 
-                        "capacity":"5Gi",
-                        "caname":"org1-ca.default",
-                        "hosts":"peer1-org1.localho.st",
+                        "caname":"jroaster1-ca.hlf-operator-experiment-2",
+                        "hosts":"jpeer0-roaster1.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443
                     }
                 ],
                 "certificateAuthorities": [
                     {
-                        "name":"org1-ca",
+                        "name":"jroaster1-ca",
                         "capacity":"1Gi",
-                        "hosts":"org1-ca.localho.st",
+                        "hosts":"jroaster1-ca.apps.lionscluster1.informatik.unibw-muenchen.de",
+                        "istioport": 443
+                    }
+                ]
+            },{
+                "name": "Roaster2",
+                "mspid": "roaster2",
+                "peers": [
+                    {
+                        "name":"jroaster2-peer0",
+                        "capacity":"5Gi",
+                        "caname":"jroaster2-ca.hlf-operator-experiment-2",
+                        "hosts":"jpeer0-roaster2.apps.lionscluster1.informatik.unibw-muenchen.de",
+                        "istioport": 443
+                    }
+                ],
+                "certificateAuthorities": [
+                    {
+                        "name":"jroaster2-ca",
+                        "capacity":"1Gi",
+                        "hosts":"jroaster2-ca.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443
                     }
                 ]
             },
             {
-                "name": "Org2",
-                "mspid": "Org2MSP",
+                "name": "Verifier1",
+                "mspid": "verifier1",
                 "peers": [
                     {
-                        "name":"org2-peer0",
+                        "name":"jverifier1-peer0",
                         "capacity":"5Gi",
-                        "caname":"org2-ca.default",
-                        "hosts":"peer0-org2.localho.st",
-                        "istioport": 443
-                    },
-                    {
-                        "name":"org2-peer1",
-                        "capacity":"5Gi",
-                        "caname":"org2-ca.default",
-                        "hosts":"peer1-org2.localho.st",
+                        "caname":"jverifier1-ca.hlf-operator-experiment-2",
+                        "hosts":"jpeer0-verifier1.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443
                     }
                 ],
                 "certificateAuthorities": [
                     {
-                        "name":"org2-ca",
+                        "name":"jverifier1-ca",
                         "capacity":"1Gi",
-                        "hosts":"org2-ca.localho.st",
+                        "hosts":"jverifier1-ca.apps.lionscluster1.informatik.unibw-muenchen.de",
+                        "istioport": 443
+                    }
+                ]
+            }, {
+                "name": "Verifier2",
+                "mspid": "verifier2",
+                "peers": [
+                    {
+                        "name":"jverifier2-peer0",
+                        "capacity":"5Gi",
+                        "caname":"jverifier2-ca.hlf-operator-experiment-2",
+                        "hosts":"jpeer0-verifier2.apps.lionscluster1.informatik.unibw-muenchen.de",
+                        "istioport": 443
+                    }
+                ],
+                "certificateAuthorities": [
+                    {
+                        "name":"jverifier2-ca",
+                        "capacity":"1Gi",
+                        "hosts":"jverifier2-ca.apps.lionscluster1.informatik.unibw-muenchen.de",
+                        "istioport": 443
+                    }
+                ]
+            },
+            {
+                "name": "ServiceProvier",
+                "mspid": "serviceprovider1",
+                "peers": [
+                    {
+                        "name":"jserviceprovider1-peer0",
+                        "capacity":"5Gi",
+                        "caname":"jserviceprovider1-ca.hlf-operator-experiment-2",
+                        "hosts":"jpeer0-serviceprovider1.apps.lionscluster1.informatik.unibw-muenchen.de",
+                        "istioport": 443
+                    }
+                ],
+                "certificateAuthorities": [
+                    {
+                        "name":"jserviceprovider1-ca",
+                        "capacity":"1Gi",
+                        "hosts":"jserviceprovider1-ca.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443
                     }
                 ]
@@ -62,24 +109,24 @@
         "ordererOrganisations": [
             {
                 "name": "OrdererOrg",
-                "mspid": "OrdererMSP",
+                "mspid": "jOrdererMSP",
                 "orderers": [
                     {
-                        "name":"ord-node1",
+                        "name":"jord-node1",
                         "capacity":"2Gi",
-                        "caname":"ord-ca.default",
-                        "hosts":"orderer0-ord.localho.st",
+                        "caname":"jord-ca.hlf-operator-experiment-2",
+                        "hosts":"jorderer0-ord.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443,
-                        "endpoint": "ord-node1:7050",
+                        "endpoint": "jord-node1:7050",
                         "externalport": 7053,
                         "port": 7050
                     }
                 ],
                 "certificateAuthorities": [
                     {
-                        "name":"ord-ca",
+                        "name":"jord-ca",
                         "capacity":"1Gi",
-                        "hosts":"ord-ca.localho.st",
+                        "hosts":"jord-ca.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443
                     }
                 ]
@@ -87,13 +134,14 @@
         ],
         "channels": [
             {
-                "name": "demo",
+                "name": "jdemo",
                 "consortium": "SampleConsortium",
                 "ordererparticipants": ["OrdererMSP"],
                 "peerparticipants": ["Org1MSP", "Org2MSP"],
                 "chaincodes": [
                     {
                         "name": "token",
+                        "dockerurl": "janzumbier/tokencontract",
                         "version": "1.0",
                         "language": "java",
                         "policy": "AND('Org1MSP.member', 'Org2MSP.member')"

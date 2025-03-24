@@ -9,7 +9,6 @@ spec:
     
   adminPeerOrganizations:
     - mspID: Org1MSP
-    - mspID: Org2MSP
     
   channelConfig:
     application:
@@ -43,18 +42,11 @@ spec:
     - mspID: Org1MSP
       caName: "org1-ca"
       caNamespace: "default"
-    - mspID: Org2MSP
-      caName: "org2-ca"
-      caNamespace: "default"
     
   identities:
     Org1MSP:
       secretKey: user.yaml
       secretName: org1msp-admin
-      secretNamespace: default
-    Org2MSP:
-      secretKey: user.yaml
-      secretName: org2msp-admin
       secretNamespace: default
     OrdererMSP:
       secretKey: user.yaml
@@ -83,22 +75,22 @@ spec:
       port: 7050
       tlsCert: |-
         -----BEGIN CERTIFICATE-----
-        MIIC2DCCAn6gAwIBAgIUGROGaGKuMAwWhxZ3hS5pGVpo3YQwCgYIKoZIzj0EAwIw
+        MIIC1zCCAn6gAwIBAgIUfBmjeJvydtelyt1CJZRPG9MNP94wCgYIKoZIzj0EAwIw
         bTELMAkGA1UEBhMCRVMxETAPBgNVBAcTCEFsaWNhbnRlMREwDwYDVQQJEwhBbGlj
         YW50ZTEZMBcGA1UEChMQS3VuZyBGdSBTb2Z0d2FyZTENMAsGA1UECxMEVGVjaDEO
-        MAwGA1UEAxMFdGxzY2EwHhcNMjQwNDI1MTQxNDE0WhcNMjUwNDI2MTQzNjAwWjAk
+        MAwGA1UEAxMFdGxzY2EwHhcNMjQwNzE3MTI0ODM1WhcNMjUwNzE4MTMwMzAwWjAk
         MRAwDgYDVQQLEwdvcmRlcmVyMRAwDgYDVQQDEwdvcmRlcmVyMFkwEwYHKoZIzj0C
-        AQYIKoZIzj0DAQcDQgAE2cY9eEf/SJiJXLQvoKgiRqQT0wr28hepNZGHMKGfQ+kx
-        ABfTbY74DkeCRqwz7qnsjqe2iThx0KMPQQqQ1telraOCAUMwggE/MA4GA1UdDwEB
+        AQYIKoZIzj0DAQcDQgAE0B5TKfk3Ag5U1UZDoMfZvxu7cC/S3h5lvRLG4Gd1mD+x
+        +2aGv9lcgD2AlM2Ox5bsuj7YFuc5cy7eqbEFdmK2SaOCAUMwggE/MA4GA1UdDwEB
         /wQEAwIDqDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/
-        BAIwADAdBgNVHQ4EFgQUpikjF9lSQxvG46cpUpiEioogntUwKwYDVR0jBCQwIoAg
-        6sWnOGFkgTUfKC4a11q0TCZ56HEIkBt2spsIvWiWRrAwVwYDVR0RBFAwToIJbG9j
+        BAIwADAdBgNVHQ4EFgQUmVf5M9o+SJuovUtFdqh7j6EYGTYwKwYDVR0jBCQwIoAg
+        3XALYUrXXGSUT8JEVSRKN1mlFQPj7IsHW2AQYws1u4wwVwYDVR0RBFAwToIJbG9j
         YWxob3N0gglvcmQtbm9kZTGCEW9yZC1ub2RlMS5kZWZhdWx0ghdvcmRlcmVyMC1v
         cmQubG9jYWxoby5zdIcEfwAAAYcErBIAAjBbBggqAwQFBgcIAQRPeyJhdHRycyI6
         eyJoZi5BZmZpbGlhdGlvbiI6IiIsImhmLkVucm9sbG1lbnRJRCI6Im9yZGVyZXIi
-        LCJoZi5UeXBlIjoib3JkZXJlciJ9fTAKBggqhkjOPQQDAgNIADBFAiEAgrZGwal9
-        Ja4MwoJOV0w3fuKtmVj+L1R0diCajhDTjnkCIAGxHOJDlIx5Fp4Dk1FLRWXtojDp
-        nohYm+J3Rb5dejcQ
+        LCJoZi5UeXBlIjoib3JkZXJlciJ9fTAKBggqhkjOPQQDAgNHADBEAiAPvNKp2STX
+        GrkNH+EwXjCJloLGlFx5JLtmB8vJSUxcUgIge82+iD+3R6kUJvsZP0z/Wc1C6pRB
+        1hn6OqjvInbFTiM=
         -----END CERTIFICATE-----
 
     

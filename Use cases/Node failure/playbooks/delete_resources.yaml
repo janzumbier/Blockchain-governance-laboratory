@@ -2,8 +2,8 @@
   - block:
       - name: Setting metadata for main channel
         set_fact:
-          channel_name: "demo"
-          org_name: "org2"
+          channel_name: "jdemo"
+          org_name: "jorg3"
 
       - name: Getting Follower channel
         shell: kubectl get fabricfollowerchannel.hlf.kungfusoftware.es/demo-{{org_name}}msp -o yaml | yq eval '.spec'

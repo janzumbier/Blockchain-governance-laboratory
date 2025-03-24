@@ -11,14 +11,15 @@
       ansible.builtin.set_fact:
         orderer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.ordererOrganisations[*]')}}"
         peer_organisations: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*]')}}"
+        namespace: "hlf-operator-experiment-2"
 
     - name: Register MSPID for peer organisations
-      command : kubectl hlf ca register --name={{ item.certificateAuthorities[0].name }} --user=admin --secret=adminpw --type=admin --enroll-id=enroll --enroll-secret=enrollpw --mspid={{item.mspid}}
+      command : kubectl hlf ca register --name={{ item.certificateAuthorities[0].name }} --user=admin --secret=adminpw --type=admin --enroll-id=enroll --enroll-secret=enrollpw --mspid={{item.mspid}} --namespace={{namespace}}
       loop: "{{ peer_organisations}}"
       ignore_errors: true
 
     - name: Enroll MSPID for peer organisations  
-      command: kubectl hlf identity create --name {{item.mspid | lower}}-admin --namespace default --ca-name {{item.certificateAuthorities[0].name}} --ca-namespace default --ca ca --mspid {{item.mspid}} --enroll-id admin --enroll-secret adminpw
+      command: kubectl hlf identity create --name {{item.mspid | lower}}-admin --namespace {{namespace}} --ca-name {{item.certificateAuthorities[0].name}} --ca-namespace {{namespace}} --ca ca --mspid {{item.mspid}} --enroll-id admin --enroll-secret adminpw
       loop: "{{peer_organisations}}"
       ignore_errors: true
 

@@ -4,21 +4,21 @@
         "peerOrganisations": [
             {
                 "name": "Org3",
-                "mspid": "Org3MSP",
+                "mspid": "jOrg3MSP",
                 "peers": [
                     {
-                        "name":"org3-peer0",
+                        "name":"jorg3-peer0",
                         "capacity":"5Gi",
-                        "caname":"org3-ca.default",
-                        "hosts":"peer0-org3.localho.st",
+                        "caname":"jorg3-ca.hlf-operator-experiment-2",
+                        "hosts":"jpeer0-org3.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443
                     }
                 ],
                 "certificateAuthorities": [
                     {
-                        "name":"org3-ca",
+                        "name":"jorg3-ca",
                         "capacity":"1Gi",
-                        "hosts":"org3-ca.localho.st",
+                        "hosts":"jorg3-ca.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443
                     }
                 ]
@@ -27,24 +27,24 @@
         "ordererOrganisations": [
             {
                 "name": "OrdererOrg",
-                "mspid": "OrdererMSP",
+                "mspid": "jOrdererMSP",
                 "orderers": [
                     {
-                        "name":"ord-node1",
+                        "name":"jord-node1",
                         "capacity":"2Gi",
-                        "caname":"ord-ca.default",
-                        "hosts":"orderer0-ord.localho.st",
+                        "caname":"jord-ca.hlf-operator-experiment-2",
+                        "hosts":"jorderer0-ord.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443,
-                        "endpoint": "ord-node1:7050",
+                        "endpoint": "jord-node1:7050",
                         "externalport": 7053,
                         "port": 7050
                     }
                 ],
                 "certificateAuthorities": [
                     {
-                        "name":"ord-ca",
+                        "name":"jord-ca",
                         "capacity":"1Gi",
-                        "hosts":"ord-ca.localho.st",
+                        "hosts":"jord-ca.apps.lionscluster1.informatik.unibw-muenchen.de",
                         "istioport": 443
                     }
                 ]
@@ -52,18 +52,18 @@
         ],
         "channels": [
             {
-                "name": "demo",
-                "ordererparticipants": ["OrdererMSP"],
+                "name": "jdemo",
+                "ordererparticipants": ["jOrdererMSP"],
                 "peerparticipants": [
 
                     {
-                        "mspid": "Org1MSP",
-                        "peer": "org1-peer0"
+                        "mspid": "jOrg1MSP",
+                        "peer": "jorg1-peer0"
 
                     },
                     {
-                        "mspid": "Org3MSP",
-                        "peer": "org3-peer0"
+                        "mspid": "jOrg3MSP",
+                        "peer": "jorg3-peer0"
                     }
                     
 
@@ -72,10 +72,10 @@
                     {
                         "name": "token",
                         "image": "janzumbier/tokencontract:latest",
-                        "version": "1.1",
-                        "sequence": "2",
+                        "version": "2.0",
+                        "sequence": "5",
                         "language": "java",
-                        "policy": "OR('Org1MSP.member', 'Org3MSP.member')"
+                        "policy": "OR('jOrg1MSP.member', 'jOrg3MSP.member')"
                     }
                 ]
             }

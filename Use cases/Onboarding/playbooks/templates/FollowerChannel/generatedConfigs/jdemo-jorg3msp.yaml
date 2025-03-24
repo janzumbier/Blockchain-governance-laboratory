@@ -1,0 +1,46 @@
+apiVersion: hlf.kungfusoftware.es/v1alpha1
+kind: FabricFollowerChannel
+metadata:
+  name: jdemo-jorg3msp
+spec:
+  
+  anchorPeers:
+    - host: jorg3-peer0.hlf-operator-experiment-2
+      port: 7051
+    
+  hlfIdentity:
+    secretKey: user.yaml
+    secretName: jorg3msp-admin
+    secretNamespace: hlf-operator-experiment-2
+
+  mspId: jOrg3MSP
+  name: jdemo
+  externalPeersToJoin: []
+  orderers:
+    - certificate: |
+        -----BEGIN CERTIFICATE-----
+        MIIDFTCCArugAwIBAgIUdSx5I0sQEIPGQwnOBoAJ1yKzDzMwCgYIKoZIzj0EAwIw
+        bTELMAkGA1UEBhMCRVMxETAPBgNVBAcTCEFsaWNhbnRlMREwDwYDVQQJEwhBbGlj
+        YW50ZTEZMBcGA1UEChMQS3VuZyBGdSBTb2Z0d2FyZTENMAsGA1UECxMEVGVjaDEO
+        MAwGA1UEAxMFdGxzY2EwHhcNMjQwNzE5MTQxNTIxWhcNMjUwNzIwMTQxODAwWjAk
+        MRAwDgYDVQQLEwdvcmRlcmVyMRAwDgYDVQQDEwdvcmRlcmVyMFkwEwYHKoZIzj0C
+        AQYIKoZIzj0DAQcDQgAEnngtHcQirfPDiNWBz8/5QZ+9tz6rKWExHyYBtrKiQsrP
+        jT13rE8E3FuHBX6zDZNHxf1x7Ne4O4p+9dUq/3omrqOCAYAwggF8MA4GA1UdDwEB
+        /wQEAwIDqDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/
+        BAIwADAdBgNVHQ4EFgQUFXDQVMuuUO4yDP+Ilb/D+wGEccEwKwYDVR0jBCQwIoAg
+        mXhEVlP0yWrwvjr2af4intq0DplZHqWXvoyG0DI0gn8wgZMGA1UdEQSBizCBiIIJ
+        bG9jYWxob3N0ggpqb3JkLW5vZGUxgiRqb3JkLW5vZGUxLmhsZi1vcGVyYXRvci1l
+        eHBlcmltZW50LTKCPWpvcmRlcmVyMC1vcmQuYXBwcy5saW9uc2NsdXN0ZXIxLmlu
+        Zm9ybWF0aWsudW5pYnctbXVlbmNoZW4uZGWHBH8AAAGHBInBRPUwWwYIKgMEBQYH
+        CAEET3siYXR0cnMiOnsiaGYuQWZmaWxpYXRpb24iOiIiLCJoZi5FbnJvbGxtZW50
+        SUQiOiJvcmRlcmVyIiwiaGYuVHlwZSI6Im9yZGVyZXIifX0wCgYIKoZIzj0EAwID
+        SAAwRQIhAJSbd1CMv1tr+kjeXFvn6GVp3HyUVTQHMACCglxKeOPeAiAlwQW4VWmK
+        JmLDTJQI2ILIhECJ0TaIKSGLCSQhKI4UZQ==
+        -----END CERTIFICATE-----
+
+      url: grpcs://jord-node1.hlf-operator-experiment-2:7050
+        
+  peersToJoin:
+    - name: jorg3-peer0
+      namespace: hlf-operator-experiment-2
+    

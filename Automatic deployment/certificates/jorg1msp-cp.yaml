@@ -1,0 +1,297 @@
+
+name: hlf-network
+version: 1.0.0
+client:
+  organization: ""
+organizations:
+  
+  jOrdererMSP:
+    mspid: jOrdererMSP
+    cryptoPath: /tmp/cryptopath
+    users: {}
+    peers: []
+    orderers:
+      - jord-node1.hlf-operator-experiment-2
+  jOrg1MSP:
+    mspid: jOrg1MSP
+    cryptoPath: /tmp/cryptopath
+    users:
+      jorg1msp-admin-hlf-operator-experiment-2:
+        cert:
+          pem: |
+            -----BEGIN CERTIFICATE-----
+            MIICUjCCAfmgAwIBAgIUf55P2Mp62FrtEm0St/wd+qYPoW0wCgYIKoZIzj0EAwIw
+            ajELMAkGA1UEBhMCRVMxETAPBgNVBAcTCEFsaWNhbnRlMREwDwYDVQQJEwhBbGlj
+            YW50ZTEZMBcGA1UEChMQS3VuZyBGdSBTb2Z0d2FyZTENMAsGA1UECxMEVGVjaDEL
+            MAkGA1UEAxMCY2EwHhcNMjQwNzE5MTQxNTE5WhcNMjUwNzIwMTQzODAwWjAgMQ4w
+            DAYDVQQLEwVhZG1pbjEOMAwGA1UEAxMFYWRtaW4wWTATBgcqhkjOPQIBBggqhkjO
+            PQMBBwNCAARu+p6kY62zvEa9bP2ooItnDnuoOeBDGzKyGh3DNnIK5cAek8ecxC/Z
+            Tilt+QYzZg7fs4+PO5BQfTyKEwMuJnPNo4HGMIHDMA4GA1UdDwEB/wQEAwIHgDAM
+            BgNVHRMBAf8EAjAAMB0GA1UdDgQWBBRk2o4V+GLoSbntDnwIo3TOXNakzjArBgNV
+            HSMEJDAigCAGGV6ZNQjRJwb+gUiHBBcl/oEmnMb4jFzK6j90gF/BDTBXBggqAwQF
+            BgcIAQRLeyJhdHRycyI6eyJoZi5BZmZpbGlhdGlvbiI6IiIsImhmLkVucm9sbG1l
+            bnRJRCI6ImFkbWluIiwiaGYuVHlwZSI6ImFkbWluIn19MAoGCCqGSM49BAMCA0cA
+            MEQCIH9rpmMqok4lzdgc0c2UqL0hA1c4xSE2hj7TqdLqiio3AiALNdPrgx6JO0jO
+            Ewfxu1yRB1h1KC/4YpDFW7UHUTJ7yA==
+            -----END CERTIFICATE-----
+            
+        key:
+          pem: |
+            -----BEGIN PRIVATE KEY-----
+            MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg5xDIS6kDHgky+2C+
+            lG09FISGQC8H4E8kzYMtCS+iE0qhRANCAARu+p6kY62zvEa9bP2ooItnDnuoOeBD
+            GzKyGh3DNnIK5cAek8ecxC/ZTilt+QYzZg7fs4+PO5BQfTyKEwMuJnPN
+            -----END PRIVATE KEY-----
+            
+    peers:
+      - jorg1-peer0.hlf-operator-experiment-2
+      - jorg1-peer1.hlf-operator-experiment-2
+    orderers: []
+
+orderers:
+  jord-node1.hlf-operator-experiment-2:
+
+    url: grpcs://jorderer0-ord.apps.lionscluster1.informatik.unibw-muenchen.de:443
+
+
+    adminUrl: https://137.193.68.245:0
+    adminTlsCert: |
+        -----BEGIN CERTIFICATE-----
+        MIIDFTCCArugAwIBAgIUBPqbkW615L9lH7vHYKMH6EQpZQowCgYIKoZIzj0EAwIw
+        bTELMAkGA1UEBhMCRVMxETAPBgNVBAcTCEFsaWNhbnRlMREwDwYDVQQJEwhBbGlj
+        YW50ZTEZMBcGA1UEChMQS3VuZyBGdSBTb2Z0d2FyZTENMAsGA1UECxMEVGVjaDEO
+        MAwGA1UEAxMFdGxzY2EwHhcNMjQwNzE5MTQxNTIxWhcNMjUwNzIwMTQxODAwWjAk
+        MRAwDgYDVQQLEwdvcmRlcmVyMRAwDgYDVQQDEwdvcmRlcmVyMFkwEwYHKoZIzj0C
+        AQYIKoZIzj0DAQcDQgAEqSoQeT8y9jZGQL5BdlF/sB9RLan7JfwDnzUcAfVxMcGq
+        mNP9p+HVXJvyw/IA3U8jxO74aUXO7C5zj1YTAl/6XKOCAYAwggF8MA4GA1UdDwEB
+        /wQEAwIDqDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUHAwIwDAYDVR0TAQH/
+        BAIwADAdBgNVHQ4EFgQUI56pTnKGsgIrZuzj8I3zxdvZNjwwKwYDVR0jBCQwIoAg
+        mXhEVlP0yWrwvjr2af4intq0DplZHqWXvoyG0DI0gn8wgZMGA1UdEQSBizCBiIIJ
+        bG9jYWxob3N0ggpqb3JkLW5vZGUxgiRqb3JkLW5vZGUxLmhsZi1vcGVyYXRvci1l
+        eHBlcmltZW50LTKCPWpvcmRlcmVyMC1vcmQuYXBwcy5saW9uc2NsdXN0ZXIxLmlu
+        Zm9ybWF0aWsudW5pYnctbXVlbmNoZW4uZGWHBH8AAAGHBInBRPUwWwYIKgMEBQYH
+        CAEET3siYXR0cnMiOnsiaGYuQWZmaWxpYXRpb24iOiIiLCJoZi5FbnJvbGxtZW50
+        SUQiOiJvcmRlcmVyIiwiaGYuVHlwZSI6Im9yZGVyZXIifX0wCgYIKoZIzj0EAwID
+        SAAwRQIhANl48ILJrouyYqOMJOQcf0zv9W+I2EV6e/EKLsctcmwMAiBKkLXHJKwv
+        ieUMFBZ5FDvfoCsP4WS398vB6K0V8Ymtzw==
+        -----END CERTIFICATE-----
+        
+
+    grpcOptions:
+      allow-insecure: false
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICRDCCAeugAwIBAgIQcalASTe0e2+kDd1dO6QfLDAKBggqhkjOPQQDAjBtMQsw
+        CQYDVQQGEwJFUzERMA8GA1UEBxMIQWxpY2FudGUxETAPBgNVBAkTCEFsaWNhbnRl
+        MRkwFwYDVQQKExBLdW5nIEZ1IFNvZnR3YXJlMQ0wCwYDVQQLEwRUZWNoMQ4wDAYD
+        VQQDEwV0bHNjYTAeFw0yNDA3MTkxNDE1MjFaFw0zNDA3MjAxNDE1MjFaMG0xCzAJ
+        BgNVBAYTAkVTMREwDwYDVQQHEwhBbGljYW50ZTERMA8GA1UECRMIQWxpY2FudGUx
+        GTAXBgNVBAoTEEt1bmcgRnUgU29mdHdhcmUxDTALBgNVBAsTBFRlY2gxDjAMBgNV
+        BAMTBXRsc2NhMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE1MgzTjuirFj4Fv+e
+        MFBUABJt5FZW8e5ryVu4FP+KYrIkqcMTzG3N6yq0PRReL+dB8VwMDHSDIK5WpcnV
+        MJGWVqNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggr
+        BgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1UdDgQiBCCZeERWU/TJavC+OvZp
+        /iKe2rQOmVkepZe+jIbQMjSCfzAKBggqhkjOPQQDAgNHADBEAiEA5Dow9Bh/y9Tw
+        cxjGMSiwtuz6ZBEUycshkQjGChM1ktQCH2TJV5zvlF8VgDOcQnQpMRttkWiDvK0+
+        /O7JJCxd+BI=
+        -----END CERTIFICATE-----
+        
+
+
+peers:
+  jorg1-peer0.hlf-operator-experiment-2:
+
+    url: grpcs://jpeer0-org1.apps.lionscluster1.informatik.unibw-muenchen.de:443
+
+    grpcOptions:
+      allow-insecure: false
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICRTCCAeugAwIBAgIQfteczk3+QmADtYIFf3P+qjAKBggqhkjOPQQDAjBtMQsw
+        CQYDVQQGEwJFUzERMA8GA1UEBxMIQWxpY2FudGUxETAPBgNVBAkTCEFsaWNhbnRl
+        MRkwFwYDVQQKExBLdW5nIEZ1IFNvZnR3YXJlMQ0wCwYDVQQLEwRUZWNoMQ4wDAYD
+        VQQDEwV0bHNjYTAeFw0yNDA3MTkxNDE1MjBaFw0zNDA3MjAxNDE1MjBaMG0xCzAJ
+        BgNVBAYTAkVTMREwDwYDVQQHEwhBbGljYW50ZTERMA8GA1UECRMIQWxpY2FudGUx
+        GTAXBgNVBAoTEEt1bmcgRnUgU29mdHdhcmUxDTALBgNVBAsTBFRlY2gxDjAMBgNV
+        BAMTBXRsc2NhMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE71LyU8hzVeK9Aulk
+        /sEqEr42xlM4OJ0ophYUaGEDFXUJ7AENctxK/R7VhR/3RkU2sEXkA4yTQG+C+hrp
+        rAAhA6NtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggr
+        BgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1UdDgQiBCAQyFykZHWA8w5SRtFb
+        w7Ad3OUt4xGQqlkAQLq8D+NRLzAKBggqhkjOPQQDAgNIADBFAiBPBVTSPq+5HrmY
+        N01xkuyWhpPpYYjwqESYbKBxrVvG3QIhAI1yawlC6CoWR02YgqZXAQUhmvk7n0qc
+        SQCI9p4faaB4
+        -----END CERTIFICATE-----
+        
+  jorg1-peer1.hlf-operator-experiment-2:
+
+    url: grpcs://jpeer1-org1.apps.lionscluster1.informatik.unibw-muenchen.de:443
+
+    grpcOptions:
+      allow-insecure: false
+    tlsCACerts:
+      pem: |
+        -----BEGIN CERTIFICATE-----
+        MIICRTCCAeugAwIBAgIQfteczk3+QmADtYIFf3P+qjAKBggqhkjOPQQDAjBtMQsw
+        CQYDVQQGEwJFUzERMA8GA1UEBxMIQWxpY2FudGUxETAPBgNVBAkTCEFsaWNhbnRl
+        MRkwFwYDVQQKExBLdW5nIEZ1IFNvZnR3YXJlMQ0wCwYDVQQLEwRUZWNoMQ4wDAYD
+        VQQDEwV0bHNjYTAeFw0yNDA3MTkxNDE1MjBaFw0zNDA3MjAxNDE1MjBaMG0xCzAJ
+        BgNVBAYTAkVTMREwDwYDVQQHEwhBbGljYW50ZTERMA8GA1UECRMIQWxpY2FudGUx
+        GTAXBgNVBAoTEEt1bmcgRnUgU29mdHdhcmUxDTALBgNVBAsTBFRlY2gxDjAMBgNV
+        BAMTBXRsc2NhMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE71LyU8hzVeK9Aulk
+        /sEqEr42xlM4OJ0ophYUaGEDFXUJ7AENctxK/R7VhR/3RkU2sEXkA4yTQG+C+hrp
+        rAAhA6NtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggr
+        BgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1UdDgQiBCAQyFykZHWA8w5SRtFb
+        w7Ad3OUt4xGQqlkAQLq8D+NRLzAKBggqhkjOPQQDAgNIADBFAiBPBVTSPq+5HrmY
+        N01xkuyWhpPpYYjwqESYbKBxrVvG3QIhAI1yawlC6CoWR02YgqZXAQUhmvk7n0qc
+        SQCI9p4faaB4
+        -----END CERTIFICATE-----
+        
+certificateAuthorities:
+  
+  jord-ca.hlf-operator-experiment-2:
+
+    url: https://jord-ca.apps.lionscluster1.informatik.unibw-muenchen.de:443
+
+
+    registrar:
+        enrollId: enroll
+        enrollSecret: "enrollpw"
+
+    caName: ca
+    tlsCACerts:
+      pem: 
+       - |
+            -----BEGIN CERTIFICATE-----
+            MIICkzCCAjmgAwIBAgIRANr86GBdKEXIzoQo2T1IfJswCgYIKoZIzj0EAwIwUjET
+            MBEGA1UEBhMKQ2FsaWZvcm5pYTEJMAcGA1UEBxMAMQkwBwYDVQQJEwAxFDASBgNV
+            BAoTC0h5cGVybGVkZ2VyMQ8wDQYDVQQLEwZGYWJyaWMwHhcNMjQwNzE5MTQxNTIx
+            WhcNMzQwNzIwMTQxNTIxWjBSMRMwEQYDVQQGEwpDYWxpZm9ybmlhMQkwBwYDVQQH
+            EwAxCTAHBgNVBAkTADEUMBIGA1UEChMLSHlwZXJsZWRnZXIxDzANBgNVBAsTBkZh
+            YnJpYzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABN7zI2RE72/IcK/hqYv0/ZOy
+            j2BVoKVz/6oZZhmsYXZGSqORJPqYzPDNlr1rpUy//jZENBiK+ldby4XtSkh1juSj
+            ge8wgewwDgYDVR0PAQH/BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+            BQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1UdDgQiBCBYMEX9vhC3doYfZY3nuEOM
+            jD9e7+zynqQl7+AcgLqovjB/BgNVHREEeDB2gglsb2NhbGhvc3SCB2pvcmQtY2GC
+            IWpvcmQtY2EuaGxmLW9wZXJhdG9yLWV4cGVyaW1lbnQtMoI3am9yZC1jYS5hcHBz
+            Lmxpb25zY2x1c3RlcjEuaW5mb3JtYXRpay51bmlidy1tdWVuY2hlbi5kZYcEfwAA
+            ATAKBggqhkjOPQQDAgNIADBFAiBoGbtCMnjFZAwrYfi5iEoR5StXcnp4ujEvfpLf
+            LCFsHwIhAKJzezzHHdzVnE35L02LQPs3i/TSLI2yg8JuLReUtjzV
+            -----END CERTIFICATE-----
+            
+  
+  jorg1-ca.hlf-operator-experiment-2:
+
+    url: https://jorg1-ca.apps.lionscluster1.informatik.unibw-muenchen.de:443
+
+
+    registrar:
+        enrollId: enroll
+        enrollSecret: "enrollpw"
+
+    caName: ca
+    tlsCACerts:
+      pem: 
+       - |
+            -----BEGIN CERTIFICATE-----
+            MIICljCCAj2gAwIBAgIRANvdfnqbjPb4XlKmpHVRGXYwCgYIKoZIzj0EAwIwUjET
+            MBEGA1UEBhMKQ2FsaWZvcm5pYTEJMAcGA1UEBxMAMQkwBwYDVQQJEwAxFDASBgNV
+            BAoTC0h5cGVybGVkZ2VyMQ8wDQYDVQQLEwZGYWJyaWMwHhcNMjQwNzE5MTQxNTE5
+            WhcNMzQwNzIwMTQxNTE5WjBSMRMwEQYDVQQGEwpDYWxpZm9ybmlhMQkwBwYDVQQH
+            EwAxCTAHBgNVBAkTADEUMBIGA1UEChMLSHlwZXJsZWRnZXIxDzANBgNVBAsTBkZh
+            YnJpYzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABBy4TgtMaBRT2llAWQ2jocbi
+            QDyJI3AwK53SiJuanBZ1oVzwJJ+OyBuzdDwml/1dxvhNk8e//TF9Vn2Eut6KiH2j
+            gfMwgfAwDgYDVR0PAQH/BAQDAgGmMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+            BQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1UdDgQiBCDwMFIBWV+LklxFbupzjN/J
+            ukiWk3tSQ3zixgUhnq9TETCBggYDVR0RBHsweYIJbG9jYWxob3N0gghqb3JnMS1j
+            YYIiam9yZzEtY2EuaGxmLW9wZXJhdG9yLWV4cGVyaW1lbnQtMoI4am9yZzEtY2Eu
+            YXBwcy5saW9uc2NsdXN0ZXIxLmluZm9ybWF0aWsudW5pYnctbXVlbmNoZW4uZGWH
+            BH8AAAEwCgYIKoZIzj0EAwIDRwAwRAIgFqF4iSQemStkIPLNJU8YuQCbDD03czQ0
+            R37NyNH28ogCICZv2uKuJQJk+zrvCp78P7niHoHmJhS/pt7EbsclJK3m
+            -----END CERTIFICATE-----
+            
+  
+  ord-ca.hlf-operator-experiment-2:
+
+    url: https://ord-ca.apps.lionscluster1.informatik.unibw-muenchen.de:443
+
+
+    registrar:
+        enrollId: enroll
+        enrollSecret: "enrollpw"
+
+    caName: ca
+    tlsCACerts:
+      pem: 
+       - |
+            -----BEGIN CERTIFICATE-----
+            MIICjzCCAjWgAwIBAgIQZDU3c7uywe7b+WNNVtBIETAKBggqhkjOPQQDAjBSMRMw
+            EQYDVQQGEwpDYWxpZm9ybmlhMQkwBwYDVQQHEwAxCTAHBgNVBAkTADEUMBIGA1UE
+            ChMLSHlwZXJsZWRnZXIxDzANBgNVBAsTBkZhYnJpYzAeFw0yNDA2MTExOTI5NDVa
+            Fw0zNDA2MTIxOTI5NDVaMFIxEzARBgNVBAYTCkNhbGlmb3JuaWExCTAHBgNVBAcT
+            ADEJMAcGA1UECRMAMRQwEgYDVQQKEwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFi
+            cmljMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAENQrORYWEVnJs72zmJMtTRhSP
+            rmmyTBl5o+weM94CHMl1I6IZepa6cKP6vtqb2TGtlHsAUIwT+GZi2m02MEl0NqOB
+            7DCB6TAOBgNVHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUF
+            BwMBMA8GA1UdEwEB/wQFMAMBAf8wKQYDVR0OBCIEIKzZSCdjoAM9sOT3MsyaCV39
+            uBgGsBanWj8y6HOyLHhEMHwGA1UdEQR1MHOCCWxvY2FsaG9zdIIGb3JkLWNhgiBv
+            cmQtY2EuaGxmLW9wZXJhdG9yLWV4cGVyaW1lbnQtMoI2b3JkLWNhLmFwcHMubGlv
+            bnNjbHVzdGVyMS5pbmZvcm1hdGlrLnVuaWJ3LW11ZW5jaGVuLmRlhwR/AAABMAoG
+            CCqGSM49BAMCA0gAMEUCIQDM7n/rFWhHEZoJUa0gNqMTT3MEGFD7MzR0TJDCH+tQ
+            hQIgMsFkBFys/Lcp/glyWq7P682fx0G3WgrM4Ul7cANfSqI=
+            -----END CERTIFICATE-----
+            
+  
+  org2-ca.hlf-operator-experiment-2:
+
+    url: https://org2-ca.apps.lionscluster1.informatik.unibw-muenchen.de:443
+
+
+    registrar:
+        enrollId: enroll
+        enrollSecret: "enrollpw"
+
+    caName: ca
+    tlsCACerts:
+      pem: 
+       - |
+            -----BEGIN CERTIFICATE-----
+            MIICkzCCAjigAwIBAgIQXEpkADAsD/wFlXM/eGsWMTAKBggqhkjOPQQDAjBSMRMw
+            EQYDVQQGEwpDYWxpZm9ybmlhMQkwBwYDVQQHEwAxCTAHBgNVBAkTADEUMBIGA1UE
+            ChMLSHlwZXJsZWRnZXIxDzANBgNVBAsTBkZhYnJpYzAeFw0yNDA2MTExOTA3NTNa
+            Fw0zNDA2MTIxOTA3NTNaMFIxEzARBgNVBAYTCkNhbGlmb3JuaWExCTAHBgNVBAcT
+            ADEJMAcGA1UECRMAMRQwEgYDVQQKEwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFi
+            cmljMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEgVCyAz9r3fUxGEW0CC0J/58m
+            kyNgZN5WTP4Fx3K28+u3PECNMSj6315t1R1hs8agWIlgWximETr6T4gaQDkVYKOB
+            7zCB7DAOBgNVHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsGAQUF
+            BwMBMA8GA1UdEwEB/wQFMAMBAf8wKQYDVR0OBCIEIHnbnL3WaRWJsiY5HuRWsPGg
+            +HR1KmJUrfyYCM2n86f2MH8GA1UdEQR4MHaCCWxvY2FsaG9zdIIHb3JnMi1jYYIh
+            b3JnMi1jYS5obGYtb3BlcmF0b3ItZXhwZXJpbWVudC0ygjdvcmcyLWNhLmFwcHMu
+            bGlvbnNjbHVzdGVyMS5pbmZvcm1hdGlrLnVuaWJ3LW11ZW5jaGVuLmRlhwR/AAAB
+            MAoGCCqGSM49BAMCA0kAMEYCIQCesJt4qjNPnqPhEaEB3pfRgpT8PMRgpuiAkk94
+            XZ4JkgIhAN9MCIJVcC+s+qlcfTXNlDvt043KnwUEeJZHU9VjH57C
+            -----END CERTIFICATE-----
+            
+
+
+channels:
+  jdemo:
+
+    orderers:
+      - jord-node1.hlf-operator-experiment-2
+
+    peers:
+       jorg1-peer0.hlf-operator-experiment-2:
+        discover: true
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+       jorg1-peer1.hlf-operator-experiment-2:
+        discover: true
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+

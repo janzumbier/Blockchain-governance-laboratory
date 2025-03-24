@@ -11,6 +11,8 @@
       ansible.builtin.set_fact:
         peer_ca: "{{ onboardingconfig | json_query('OnboardingConfig.peerOrganisations[*].certificateAuthorities[*][]')}}"
         orderer_ca: "{{ onboardingconfig | json_query('OnboardingConfig.ordererOrganisations[*].certificateAuthorities[*][]')}}"
+        namespace: "hlf-operator-experiment-2"
+        storageclass: "ocs-storagecluster-2-cephfs"
 
     
     - name: Print detected configuration for peer-orgs
@@ -19,6 +21,6 @@
       loop: "{{ peer_ca }}"
     
     - name: Deploy Peer cas
-      command: kubectl hlf ca create --storage-class=standard --capacity={{ item.capacity }} --name={{ item.name  }} --enroll-id=enroll --enroll-pw=enrollpw --hosts={{ item.hosts  }} --istio-port={{ item.istioport }} 
+      command: kubectl hlf ca create --storage-class={{storageclass}} --capacity={{ item.capacity }} --name={{ item.name  }} --enroll-id=enroll --enroll-pw=enrollpw --hosts={{ item.hosts  }} --istio-port={{ item.istioport }} --namespace={{namespace}} 
       loop: "{{ peer_ca }}"
 
